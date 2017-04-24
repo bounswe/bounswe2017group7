@@ -21,6 +21,6 @@ urlpatterns = [
     url(r'^book/(?P<pk>[0-9]+)/$', views.book_detail),
     url(r'^book/(?P<title>[a-zA-Z0-9_\x20]+)/$', views.book_detail_by_title),
     url(r'^lang/(?P<lang>[a-zA-Z0-9_\x20]+)/$', views.book_detail_by_language),
-    url(r'^author/(?P<lang>[a-zA-Z0-9_\x20]+)/$', views.book_detail_by_author),
+    url(r'^author/(?P<author>[a-zA-Z0-9_\x20]+)/$', views.book_detail_by_author),
 
 ]
