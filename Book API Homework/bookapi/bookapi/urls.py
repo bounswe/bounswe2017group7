@@ -18,4 +18,5 @@ from book import views
 
 urlpatterns = [
     url(r'^book/$', views.book_list),
+    url(r'^book/(?P<pk>[0-9]+)/$', views.book_detail),
 ]
