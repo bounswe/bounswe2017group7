@@ -119,3 +119,32 @@ def book_detail_by_language(request, lang):
     elif request.method == 'DELETE':
         book.delete()
         return HttpResponse(status=204)
+
+
+def book_detail_by_author(request, author):
+    """
+    Retrieve, update or delete a book.
+    """
+    try:
+        book = Book.objects.filter(author=author)
+    except Book.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = BookSerializer(book,many=True)
+        return JsonResponse(serializer.data,safe=False)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = BookSerializer(book, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400)
+
+    elif request.method == 'DELETE':
+        book.delete()
+        return HttpResponse(status=204)
+
+
+
