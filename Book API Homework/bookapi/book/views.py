@@ -85,3 +85,33 @@ def book_detail_by_title(request, title):
     elif request.method == 'DELETE':
         book.delete()
         return HttpResponse(status=204)
+
+
+# Returns a Json response for the book in a given language if the request is a GET request.
+# Adds a new book to the database if the request is a PUT request.
+# Deletes book of title if the request is a DELETE request.
+@csrf_exempt
+def book_detail_by_language(request, language):
+    """
+    Retrieve, update or delete a book.
+    """
+    try:
+        book = Book.objects.get(language = language)
+    except Book.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = BookSerializer(book)
+        return JsonResponse(serializer.data)
+
+    elif request.method == 'PUT':
+        data = JSONParser().parse(request)
+        serializer = BookSerializer(book, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400)
+
+    elif request.method == 'DELETE':
+        book.delete()
+        return HttpResponse(status=204)
