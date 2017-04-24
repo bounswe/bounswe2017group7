@@ -91,18 +91,22 @@ def book_detail_by_title(request, title):
 # Adds a new book to the database if the request is a PUT request.
 # Deletes book of title if the request is a DELETE request.
 @csrf_exempt
-def book_detail_by_language(request, language):
+def book_detail_by_language(request, lang):
     """
     Retrieve, update or delete a book.
     """
+
+    print "hey"
+
     try:
-        book = Book.objects.get(language = language)
+        # Filters books
+        book = Book.objects.filter(language = lang)
     except Book.DoesNotExist:
         return HttpResponse(status=404)
 
     if request.method == 'GET':
-        serializer = BookSerializer(book)
-        return JsonResponse(serializer.data)
+        serializer = BookSerializer(book, many=True)
+        return JsonResponse(serializer.data, safe=False)
 
     elif request.method == 'PUT':
         data = JSONParser().parse(request)
