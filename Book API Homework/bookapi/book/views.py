@@ -126,7 +126,7 @@ def book_detail_by_author(request, author):
     Retrieve, update or delete a book.
     """
     try:
-        book = Book.objects.get(author=author)
+        book = Book.objects.filter(author=author)
     except Book.DoesNotExist:
         return HttpResponse(status=404)
 
