@@ -9,6 +9,7 @@ from rest_framework.parsers import JSONParser
 from book.models import Book
 from book.serializers import BookSerializer
 
+# Returns a Json response containing all the books.
 @csrf_exempt
 def book_list(request):
     """
@@ -27,6 +28,9 @@ def book_list(request):
             return JsonResponse(serializer.data, status=201)
         return JsonResponse(serializer.errors, status=400)
 
+# Returns a Json response for the book of id pk if the request is a GET request.
+# Adds a new book to the database if the request is a POST request.
+# Deletes book of id pk if the request is a DELETE request.
 @csrf_exempt
 def book_detail(request, pk):
     """
