@@ -31,7 +31,7 @@ To add a new functionality to the api, follow the steps below.
 * Open "Book API Homework/bookapi/book/views.py"  
 This file contains the functions. If you want to add a new functionality please add your function here.
 * Write your function with the `@csrf_exempt` in the beginning and process the request.
-* Open "Book API Homework/bookapi/book/urls.py"
+* Open "Book API Homework/bookapi/bookapi/urls.py"
 This file contains the urls and their related functions.
 * Add your url pattern and link it to your function in views.
 * Run server (run `python manage.py runserver` in "(env)/Book API Homework/bookapi")
