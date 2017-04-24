@@ -22,5 +22,5 @@ urlpatterns = [
     url(r'^book/(?P<title>[a-zA-Z0-9_\x20]+)/$', views.book_detail_by_title),
     url(r'^lang/(?P<lang>[a-zA-Z0-9_\x20]+)/$', views.book_detail_by_language),
     url(r'^author/(?P<author>[a-zA-Z0-9_\x20]+)/$', views.book_detail_by_author),
-    url(r'^year/(?P<lang>[a-zA-Z0-9_\x20]+)/$', views.book_year),
+    url(r'^year/(?P<year>[a-zA-Z0-9_\x20]+)/$', views.book_year),
 ]

@@ -148,12 +148,12 @@ def book_detail_by_author(request, author):
 
 
 @csrf_exempt
-def book_year(request, title):
+def book_year(request, year):
     """
     Retrieve, update or delete a book.
     """
     try:
-        book = Book.objects.get(year=year)
+        book = Book.objects.filter(year=year)
     except Book.DoesNotExist:
         return HttpResponse(status=404)
 
