@@ -24,3 +24,15 @@ If there is an error telling you that you need django installed, follow the step
 * Retry running the server: `python manage.py runserver`
 
 See the book listing result by going to the address "http://127.0.0.1:8000/book/"
+
+# Add new functionality to the API
+To add a new functionality to the api, follow the steps below.
+
+* Open "Book API Homework/bookapi/book/view.py"  
+This file contains the functions. If you want to add a new functionality please add your function here.
+* Write your function with the `@csrf_exempt` in the beginning and process the request.
+* Open "Book API Homework/bookapi/book/urls.py"
+This file contains the urls and their related functions.
+* Add your url pattern and link it to your function in views.
+* Run server (run `python manage.py runserver` in "(env)/Book API Homework/bookapi")
+* Try your newly added url. ("http://127.0.0.1:8000/<your_url>")
