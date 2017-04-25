@@ -175,7 +175,7 @@ def book_year(request, year):
 
 
 @csrf_exempt
-def book_year(request, rate):
+def book_rate(request, rate):
     """
     Retrieve, update or delete a book rating.
     """
