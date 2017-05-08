@@ -42,3 +42,14 @@ To test the API's GET and POST methods, follow the steps below.
 * Download and install Postman from https://www.getpostman.com/apps.  
 * Run server (run `python manage.py runserver` in "(env)/Book API Homework/bookapi")
 * Open Postman, select your request type (GET, POST, DELETE, etc.), and hit send.
+
+# Runnning existing unit tests  
+* Run the environment (`source env/bin/activate`)
+* Go into the bookapi folder: `cd bookapi`
+* Run the tests: `python manage.py test`
+
+# Adding new unittests  
+* Give a name to the url are going to test by adding a name='<chosen-url-name>' attribute to the urls.py file in bookapi folder.  
+* Add your test case to the tests.py file in book folder.  
+  
+CAREFUL: The test database is different from the actual database. Before every test, the test database is cleaned and emptied. If you are adding a GET test, make sure you POST some dummy data beforehand.
