@@ -7,8 +7,7 @@ To copy this branch and work with the API, please follow the steps below:
 * Clone the repository: `git clone https://github.com/bounswe/bounswe2017group7.git`
 * Go into the folder: `cd bounswe2017group7`
 * See all the branches: `git branch -a`
-* Checkout to this branch: `git checkout origin/bookapi_booklist`
-(The two steps above will not be needed after the pull request is resulted.)
+* Checkout to any branch you want to see: `git checkout origin/<branch_name>`
 * Fetch the current files: `git fetch`
 
 Now you have all the data in your local.  
