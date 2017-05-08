@@ -34,4 +34,11 @@ This file contains the functions. If you want to add a new functionality please 
 This file contains the urls and their related functions.
 * Add your url pattern and link it to your function in views.
 * Run server (run `python manage.py runserver` in "(env)/Book API Homework/bookapi")
-* Try your newly added url. ("http://127.0.0.1:8000/<your_url>")
+* Try your newly added url. ("http://127.0.0.1:8000/<your_url>" or via Postman (see below))
+
+# Test the API  
+To test the API's GET and POST methods, follow the steps below.  
+  
+* Download and install Postman from https://www.getpostman.com/apps.  
+* Run server (run `python manage.py runserver` in "(env)/Book API Homework/bookapi")
+* Open Postman, select your request type (GET, POST, DELETE, etc.), and hit send.
