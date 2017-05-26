@@ -8,6 +8,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from book.models import Book
+from book.models import Author
 
 class BookAPITests(APITestCase):
 
@@ -47,3 +48,14 @@ class BookAPITests(APITestCase):
         for book in response:
             self.assertEqual(book['language'], 'english')
         
+
+    def test_authorlist_post(self):
+        url = reverse('list_authors')
+        data = {'name': 'examplename', 'surname': 'examplesur', 'age': '45'}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Author.objects.count(), 1)
+        self.assertEqual(Author.objects.get().name, 'examplename')
+        self.assertEqual(Author.objects.get().surname, 'examplesur')
+        self.assertEqual(Author.objects.get().age, '45')
+

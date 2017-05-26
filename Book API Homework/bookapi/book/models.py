@@ -16,3 +16,14 @@ class Book(models.Model):
 
     class Meta:
         ordering = ('created',)
+
+class Author(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=50, blank=True, default='')
+    surname = models.CharField(max_length=50, blank=True, default='')
+    age = models.CharField(default='', max_length=50)
+    	
+    class Meta:
+        ordering = ('created',)
+
+
