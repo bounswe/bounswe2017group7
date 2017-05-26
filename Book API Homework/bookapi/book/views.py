@@ -8,6 +8,8 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from book.models import Book
 from book.serializers import BookSerializer
+from book.models import Author
+from book.serializers import AuthorSerializer
 
 # Returns a Json response containing all the books.
 @csrf_exempt
@@ -74,8 +76,8 @@ def book_detail_by_title(request, title):
         serializer = BookSerializer(book)
         return JsonResponse(serializer.data)
 
-    elif request.method == 'PUT':
         data = JSONParser().parse(request)
+    elif request.method == 'PUT':
         serializer = BookSerializer(book, data=data)
         if serializer.is_valid():
             serializer.save()
@@ -200,4 +202,22 @@ def book_rate(request, rate):
         book.delete()
         return HttpResponse(status=204)
 
+# Returns a Json response containing all the authors.
+@csrf_exempt
+def author_list(request):
+    """
+    List all authors, or create a new author.
+    """
+    if request.method == 'GET':
+        authors = Author.objects.all()
+        serializer = AuthorSerializer(authors, many=True)
+        return JsonResponse(serializer.data, safe=False)
 
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = AuthorSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+   

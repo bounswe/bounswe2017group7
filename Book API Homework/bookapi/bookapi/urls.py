@@ -20,8 +20,9 @@ urlpatterns = [
     url(r'^book/$', views.book_list, name='book'),
     url(r'^book/(?P<pk>[0-9]+)/$', views.book_detail),
     url(r'^book/(?P<title>[a-zA-Z0-9_\x20]+)/$', views.book_detail_by_title),
+    url(r'^book/author/(?P<author>[a-zA-Z0-9_\x20]+)/$', views.book_detail_by_author),
+    url(r'^author/$', views.author_list, name='list_authors'),
     url(r'^lang/(?P<lang>[a-zA-Z0-9_\x20]+)/$', views.book_detail_by_language, name='search_language'),
-    url(r'^author/(?P<author>[a-zA-Z0-9_\x20]+)/$', views.book_detail_by_author),
     url(r'^year/(?P<year>[a-zA-Z0-9_\x20]+)/$', views.book_year),
 	url(r'^rate/(?P<rate>[0-9]+)/$', views.book_rate)
 ]
