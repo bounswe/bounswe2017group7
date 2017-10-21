@@ -18,10 +18,12 @@ def get_json(url):
 	return retrieved_json;
 
 
-def get_updates():
+def get_updates(offset=None):
 	updateURL = URL + "getUpdates"
-	_json = get_json(updateURL);
+	if offset:
+		updateURL += "?offset={}".format(offset);
 	print "updates!!!!!";
+	_json = get_json(updateURL);
 	print _json;
 	return _json;
 
@@ -29,7 +31,8 @@ def get_last_chat(updates):
 	length = len(updates["result"]);
 	text = updates["result"][length-1]["message"]["text"];
 	chat_id = updates["result"][length-1]["message"]["chat"]["id"];
-	return [text, chat_id];
+	update_id = updates["result"][length-1]["update_id"]; 
+	return [text, chat_id, update_id];
 
 def send_message(chat_id):
 	sendURL = URL + "sendMessage?text={}&chat_id={}".format("jamiryo",chat_id);
@@ -37,11 +40,13 @@ def send_message(chat_id):
 
 def main():
 	last_chat = (None, None);
+	last_update = None;
 	while True:
-		text, chat = get_last_chat(get_updates());
+		text, chat, update_id = get_last_chat(get_updates(last_update));
 		if(text, chat) != last_chat:
 			send_message(chat);
-			last_chat = (text, chat);
+			last_chat = (text, chat);			
+			last_update = update_id; 
 		time.sleep(0.5);
 
 
