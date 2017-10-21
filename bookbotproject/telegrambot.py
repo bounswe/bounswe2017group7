@@ -14,17 +14,14 @@ def send_request(url):
 def get_json(url):
 	content = send_request(url);
 	retrieved_json = json.loads(content);
-	print retrieved_json;
 	return retrieved_json;
 
 
 def get_updates(offset=None):
-	updateURL = URL + "getUpdates"
+	updateURL = URL + "getUpdates?timeout=100"
 	if offset:
-		updateURL += "?offset={}".format(offset);
-	print "updates!!!!!";
+		updateURL += "&offset={}".format(offset);
 	_json = get_json(updateURL);
-	print _json;
 	return _json;
 
 def get_last_chat(updates):
