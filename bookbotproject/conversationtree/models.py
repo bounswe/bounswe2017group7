@@ -9,7 +9,7 @@ class Node(MPTTModel):
     #Every node has a title name to describe their purpose.
     name = models.CharField(max_length=100, blank=True, unique=True)
     # Every node has an intent. (Will be used to choose which child the parent will select to go).
-    intent = models.CharField(max_length=100, blank=True)
+    intent = models.CharField(max_length=100, blank=True, unique=True)
     # Every node has a parent. (Default parent is the root).
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
     # Every node has a message that is going to be sent to the user when on that node.
