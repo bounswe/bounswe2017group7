@@ -15,7 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from conversationtree import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^nodes/$', views.node_list),
+    url(r'^nodes/(?P<pk>\w+)/$', views.nodes_detail)
 ]
