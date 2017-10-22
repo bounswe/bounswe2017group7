@@ -2,8 +2,11 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
-from .models import ConversationTree, ConversationNode
+from mptt.admin import MPTTModelAdmin
+from .models import Node
 
-# Register your models here.
-admin.site.register(ConversationTree)
-admin.site.register(ConversationNode)
+admin.site.register(Node,
+                    MPTTModelAdmin,
+                    list_display=('name', 'intent', 'message',),
+                    list_display_links=('name',)
+                    ,)
