@@ -21,3 +21,20 @@ class Node(MPTTModel):
     
     class MPTTMeta:
         order_insertion_by = ['name']
+
+class TelegramUser(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    # Telegram user can have a name if they choose to provide one.
+    name = models.CharField(max_length=100, blank=True)
+    # Telegram user has an id.
+    userid = models.IntegerField(unique=True)
+    # Telegram user has a chat id
+    chatid = models.IntegerField(unique=True)
+    # Telegram user has their current node in the conversation tree.
+    currentnode = models.ForeignKey(Node, blank=True)
+
+    def __unicode__(self):
+        return (str(self.userid) + " " + self.name)
+    
+    class MPTTMeta:
+        order_insertion_by = ['name']
