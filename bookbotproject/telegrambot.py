@@ -33,7 +33,7 @@ def get_last_chat(updates):
 
 def get_next_message_by_response(text):
 	# TODO This should calculate and return next message after wit.ai is ready
-	return "jamiryo";
+	return "J.K. Rowling"
 
 def send_message(message, chat_id):
 	response = get_next_message_by_response(message);
