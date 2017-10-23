@@ -6,7 +6,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 from django.utils import timezone
 
 class Node(MPTTModel):
-    created = models.DateTimeField(default=timezone.now)
+    created = models.DateTimeField(auto_now_add=True)
     #Every node has a title name to describe their purpose.
     name = models.CharField(max_length=100, blank=True, unique=True)
     # Every node has an intent. (Will be used to choose which child the parent will select to go).
@@ -21,3 +21,12 @@ class Node(MPTTModel):
     
     class MPTTMeta:
         order_insertion_by = ['name']
+
+class Template(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    # This template belongs to a node.
+    node = TreeForeignKey(Node)
+    template = models.CharField(max_length=500)
+
+    class MPTTMeta:
+        order_insertion_by = ['node']
