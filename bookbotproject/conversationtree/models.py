@@ -3,9 +3,10 @@ from __future__ import unicode_literals
 
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
+from django.utils import timezone
 
 class Node(MPTTModel):
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(default=timezone.now)
     #Every node has a title name to describe their purpose.
     name = models.CharField(max_length=100, blank=True, unique=True)
     # Every node has an intent. (Will be used to choose which child the parent will select to go).
