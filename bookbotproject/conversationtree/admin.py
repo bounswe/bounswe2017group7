@@ -3,10 +3,12 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
-from .models import Node
+from .models import Node, TelegramUser
 
 admin.site.register(Node,
                     MPTTModelAdmin,
                     list_display=('name', 'intent', 'message',),
                     list_display_links=('name',)
                     ,)
+admin.site.register(TelegramUser, list_display=('__unicode__', 'currentnode',),
+                                       list_display_links=('__unicode__',),)
