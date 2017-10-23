@@ -10,4 +10,5 @@ admin.site.register(Node,
                     list_display=('name', 'intent', 'message',),
                     list_display_links=('name',)
                     ,)
-admin.site.register(TelegramUser)
+admin.site.register(TelegramUser, list_display=('__unicode__', 'currentnode',),
+                                       list_display_links=('__unicode__',),)

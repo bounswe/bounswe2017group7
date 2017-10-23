@@ -34,7 +34,7 @@ class TelegramUser(models.Model):
     currentnode = TreeForeignKey(Node, blank=True)
 
     def __unicode__(self):
-        return (str(self.userid) + " " + self.name)
+        return (str(self.userid) + " - " + self.name)
     
     class MPTTMeta:
         order_insertion_by = ['name']
