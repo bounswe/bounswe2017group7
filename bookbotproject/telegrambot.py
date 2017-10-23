@@ -31,9 +31,13 @@ def get_last_chat(updates):
 	update_id = updates["result"][length-1]["update_id"]; 
 	return [text, chat_id, update_id];
 
+def get_next_message_by_response(text):
+	# TODO This should calculate and return next message after wit.ai is ready
+	return "jamiryo";
+
 def send_message(message, chat_id):
-	# TODO This should calculate and send the next message message after wit.ai is ready!
-	sendURL = URL + "sendMessage?text={}&chat_id={}".format("jamiryo",chat_id);
+	response = get_next_message_by_response(message);
+	sendURL = URL + "sendMessage?text={}&chat_id={}".format(response, chat_id);
 	send_request(sendURL);
 
 def main():
