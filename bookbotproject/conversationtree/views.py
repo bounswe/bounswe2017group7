@@ -35,7 +35,7 @@ def nodes_detail(request, pk):
     Retrieve, update or delete a code snippet.
     """
     try:
-        node = Node.objects.get(name=pk)
+        node = Node.objects.get(intent=pk)
     except Node.DoesNotExist:
         return HttpResponse(status=404)
 
