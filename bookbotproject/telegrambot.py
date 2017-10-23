@@ -31,7 +31,8 @@ def get_last_chat(updates):
 	update_id = updates["result"][length-1]["update_id"]; 
 	return [text, chat_id, update_id];
 
-def send_message(chat_id):
+def send_message(message, chat_id):
+	# TODO This should calculate and send the next message message after wit.ai is ready!
 	sendURL = URL + "sendMessage?text={}&chat_id={}".format("jamiryo",chat_id);
 	send_request(sendURL);
 
@@ -41,7 +42,7 @@ def main():
 	while True:
 		text, chat, update_id = get_last_chat(get_updates(last_update));
 		if(text, chat) != last_chat:
-			send_message(chat);
+			send_message(text, chat);
 			last_chat = (text, chat);			
 			last_update = update_id; 
 		time.sleep(0.5);
