@@ -31,7 +31,7 @@ class TelegramUser(models.Model):
     # Telegram user has a chat id
     chatid = models.IntegerField(unique=True)
     # Telegram user has their current node in the conversation tree.
-    currentnode = models.ForeignKey(Node, blank=True)
+    currentnode = TreeForeignKey(Node, blank=True)
 
     def __unicode__(self):
         return (str(self.userid) + " " + self.name)
