@@ -38,3 +38,13 @@ class TelegramUser(models.Model):
     
     class MPTTMeta:
         order_insertion_by = ['name']
+
+        
+class Template(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    # This template belongs to a node.
+    node = TreeForeignKey(Node)
+    template = models.CharField(max_length=500)
+ 
+    class MPTTMeta:
+        order_insertion_by = ['node']
