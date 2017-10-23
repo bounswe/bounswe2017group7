@@ -13,7 +13,7 @@ from serializers import NodeSerializer
 @csrf_exempt
 def node_list(request):
     """
-    List all code snippets, or create a new snippet.
+    List all nodes, or create a new node.
     """
     if request.method == 'GET':
         nodes = Node.objects.all()
@@ -32,7 +32,7 @@ def node_list(request):
 @csrf_exempt
 def nodes_detail(request, pk):
     """
-    Retrieve, update or delete a code snippet.
+    Retrieve, update or delete a node.
     """
     try:
         node = Node.objects.get(intent=pk)
