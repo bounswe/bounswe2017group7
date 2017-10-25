@@ -2,6 +2,9 @@ import json
 import requests
 import time
 import goodReadsApi
+from witapi import get_Intent
+from conversationtree.models import *
+
 
 TOKEN = "433004356:AAFzeqBEW8_UgEPDOnJ8bnQAPitaR7gLSSo";
 URL = 	"https://api.telegram.org/bot{}/".format(TOKEN);
@@ -56,6 +59,14 @@ def send_message(message, chat_id):
 	sendURL = URL + "sendMessage?text={}&chat_id={}".format(response, chat_id);
 	send_request(sendURL);
 
+def getNextNodeMessage(input_text, telegram_user)
+	intent_ret = get_Intent(input_text)
+	curr_node = telegram_user.currentnode
+	for i in range(len(curr_node.get_children()))
+		if(intent_ret == curr_node.get_children()[i].intent)
+			telegram_user.currentnode=curr_node.get_children()[i]
+			return telegram_user.currentnode.message
+
 def main():
 	last_chat = (None, None);
 	last_update = None;
@@ -64,7 +75,7 @@ def main():
 		if(text, chat) != last_chat:
 			#print(text)
 			### if intent is search book, send 3 messages(for instance 3 popular books need to be sent )
-			send_message(text, chat);
+			send_message(getNextNodeMessage(input_text, telegram_user));
 			print("message sent")
 			last_chat = (text, chat);			
 			last_update = update_id; 
@@ -73,3 +84,5 @@ def main():
 
 if __name__ == '__main__':
 	main();
+
+
