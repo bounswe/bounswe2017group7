@@ -8,6 +8,8 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from conversationtree.models import Node
 from serializers import NodeSerializer
+from conversationtree.models import TelegramUser
+from serializers import TelegramUserSerializer
 
 # Create your views here.
 @csrf_exempt
@@ -28,8 +30,6 @@ def node_list(request):
             return JsonResponse(serializer.data, status=201)
         return JsonResponse(serializer.errors, status=400)
 
-
-#TODO: django rest framework, user info should return according to parameter:chat id from telegrambot.py#
 
 @csrf_exempt
 def nodes_detail(request, pk):
@@ -56,3 +56,36 @@ def nodes_detail(request, pk):
     elif request.method == 'DELETE':
         node.delete()
         return HttpResponse(status=204)
+
+@csrf_exempt
+def get_user_info(request, pk):
+    """
+    Gets user info if it exists, otherwise creates new one 
+    """
+    try:
+        user = TelegramUser.objects.get(userid=pk)
+    except TelegramUser.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = TelegramUserSerializer(user)
+        return JsonResponse(serializer.data)
+
+
+@csrf_exempt
+def add_new_user(request, _name, _userid, _chatid):
+    """
+    Gets user info if it exists, otherwise creates new one 
+    """
+    try:
+        node = Node.objects.get(intent="root")
+    except Node.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'POST':
+        newUser = TelegramUser.objects.create(name=_name, userid=_userid, chatid = _chatid, currentnode = node)
+        return HttpResponse(status=200)
+
+
+
+
