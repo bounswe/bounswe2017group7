@@ -75,7 +75,7 @@ def main():
 		if(text, chat) != last_chat:
 			#print(text)
 			### if intent is search book, send 3 messages(for instance 3 popular books need to be sent )
-			send_message(getNextNodeMessage(input_text, telegram_user));
+			send_message(getNextNodeMessage(input_text, telegram_user),chat);
 			print("message sent")
 			last_chat = (text, chat);			
 			last_update = update_id; 
