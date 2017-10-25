@@ -29,6 +29,8 @@ def node_list(request):
         return JsonResponse(serializer.errors, status=400)
 
 
+#TODO: django rest framework, user info should return according to parameter:chat id from telegrambot.py#
+
 @csrf_exempt
 def nodes_detail(request, pk):
     """
