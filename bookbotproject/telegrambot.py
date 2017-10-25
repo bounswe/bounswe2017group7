@@ -5,7 +5,7 @@ import goodReadsApi
 
 TOKEN = "433004356:AAFzeqBEW8_UgEPDOnJ8bnQAPitaR7gLSSo";
 URL = 	"https://api.telegram.org/bot{}/".format(TOKEN);
-LOCAL = "http://127.0.0.1:8080/"
+HOST = "http://18.216.103.59:8000/"
 
 def send_request(url):
 	res = requests.get(url);
@@ -28,13 +28,13 @@ def get_updates(offset=None):
 
 def check_user(name, user_id, chat_id):
 	""" check if user exists"""
-	url = LOCAL + "getUser/{}".format(user_id)
+	url = HOST + "getUser/{}".format(user_id)
 	r = requests.get(url)
 
 	""" if not create new user"""
 	if r.status_code == 404:
 		try:
-			url =  LOCAL + "addUser/{}/{}/{}/".format(name, user_id, chat_id)
+			url =  HOST + "addUser/{}/{}/{}/".format(name, user_id, chat_id)
 			r = requests.post(url)
 			if r.status_code != 200:
 				print("Error in check_user")
