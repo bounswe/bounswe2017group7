@@ -1,0 +1,8 @@
+Requirements to get this repo running properly:
+
+sudo pip install django
+sudo pip install djangorestframework
+sudo pip install pygments
+sudo pip install django-mptt
+sudo pip install requests
+sudo pip install goodreads
