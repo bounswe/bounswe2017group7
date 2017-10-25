@@ -5,6 +5,7 @@ import goodReadsApi
 
 TOKEN = "433004356:AAFzeqBEW8_UgEPDOnJ8bnQAPitaR7gLSSo";
 URL = 	"https://api.telegram.org/bot{}/".format(TOKEN);
+LOCAL = "http://127.0.0.1:8080/"
 
 def send_request(url):
 	res = requests.get(url);
@@ -25,11 +26,31 @@ def get_updates(offset=None):
 	_json = get_json(updateURL);
 	return _json;
 
+def check_user(name, user_id, chat_id):
+	""" check if user exists"""
+	url = LOCAL + "getUser/{}".format(user_id)
+	r = requests.get(url)
+
+	""" if not create new user"""
+	if r.status_code == 404:
+		try:
+			url =  LOCAL + "addUser/{}/{}/{}/".format(name, user_id, chat_id)
+			r = requests.post(url)
+			if r.status_code != 200:
+				print("Error in check_user")
+		except requests.exceptions.RequestException as e:
+			print e 
+		
+
 def get_last_chat(updates):
 	length = len(updates["result"]);
+	name = updates["result"][length-1]["message"]["from"]["username"];
+	user_id = updates["result"][length-1]["message"]["from"]["id"];
 	text = updates["result"][length-1]["message"]["text"];
 	chat_id = updates["result"][length-1]["message"]["chat"]["id"];
 	update_id = updates["result"][length-1]["update_id"]; 
+	check_user(name, user_id, chat_id)
+
 	return [text, chat_id, update_id];
 
 def get_next_message_by_response(text, chat_id):
@@ -51,6 +72,7 @@ def get_next_message_by_response(text, chat_id):
 	#sometimes these searches returns multiple dimensional arrays. when it happens no message returns to the user. for exmple: make a search_by_author("dan brown")
 	# we need to handle this bug
 	return book[0]
+
 def send_message(message, chat_id):
 	response = get_next_message_by_response(message, chat_id);
 	sendURL = URL + "sendMessage?text={}&chat_id={}".format(response, chat_id);
