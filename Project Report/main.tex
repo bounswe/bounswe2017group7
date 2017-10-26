@@ -12,6 +12,7 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage[colorinlistoftodos]{todonotes}
+\usepackage{hyperref}
 
 \title{Book Bot Project}
 \author{Group 7}
@@ -33,7 +34,51 @@ This file is a project report about Group 7's Book Bot Project for CmpE451 class
 
 \subsection{Project Requirements}
 
-TODO: Write project requirements
+We have defined our project requirements as follows and our customer has agreed and approved the requirements. Note that the following is a summary of the detailed requirements page. You can see the full list from \href{https://github.com/bounswe/bounswe2017group7/wiki/Project-Requirements}{project requirements} in our wiki page.
+
+\begin{enumerate}
+\item Functional Requirements
+  \begin{enumerate}
+  \item System Requirements
+    \begin{enumerate}
+    \item Telegram will be the medium for the bot.
+    \item Goodreads or Google Books will be our source of book related information.
+    \item Wit.ai will be used for NLP purposes to understand natural language.
+    \item There will be regular users, admins and moderators.
+    \item There will be a conversation tree which is going to be used to determine the conversation direction.
+    \end{enumerate}
+  \item User Requirements
+    \begin{enumerate}
+    \item We will have regular users as Telegram Users.
+    	\begin{enumerate}
+        \item Users will be able to get information; search for books, filter them, sort them and read comments about them
+        \item Users will be able to give feedback about books; comment on them and rate them.
+        \item Users will be able to get book recommendations.
+        \end{enumerate}
+    \item We will have admin users.
+        \begin{enumerate}
+        \item Admins will be able to modify the conversation tree
+        \item Admins will be able to see and flag comments
+        \item Admins will be able to see and block users
+        \end{enumerate}
+    \item We will have moderator users.
+        \begin{enumerate}
+        \item Moderators will be able to see and flag comments
+        \item Moderators will be able to see and block users
+        \end{enumerate}
+    \end{enumerate}
+  \end{enumerate}
+\item Non Functional Requirements
+  \begin{enumerate}
+  \item Speed: We are creating a bot which users can chat with so the response time cannot be more than 5 seconds.
+  \item Size: We want our bot to be portable an not bulky, we will use the Telegram as our medium hence the user won't need extra space for the bot.
+  \item Usage: It should be easy to use, there shouldn't be any training time.
+  \item Requirements: Bot needs internet connection to work.
+  \item Failures: If bot fails, it shouldn't take more than ten minutes to restart the system and get it working again.
+  \item Target devices: We are targeting all platforms in which Telegram works.
+  \item User Satisfaction: Bot should keep track of the success of its recommendations by tracking the ratings of the recommended books.
+  \end{enumerate}
+\end{enumerate}
 
 \subsection{Project Design}
 
