@@ -105,11 +105,14 @@ def get_response(request, _message, _chatid):
         print(curr_node)
 
         for i in range(len(curr_node.get_children())):
-            print("intent_ret")
+            print("intent" + intent_ret)
             print(curr_node.get_children()[i].intent)
             if intent_ret == curr_node.get_children()[i].intent:
                 curr_user.currentnode=curr_node.get_children()[i]
+                curr_user.save()
                 print("here")
                 return JsonResponse(curr_user.currentnode.message, safe=False)
+
+    return JsonResponse(curr_user.currentnode.message, safe=False)
 
     
