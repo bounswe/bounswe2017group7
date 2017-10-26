@@ -10,6 +10,7 @@ from conversationtree.models import Node
 from serializers import NodeSerializer
 from conversationtree.models import TelegramUser
 from serializers import TelegramUserSerializer
+from witapi import *
 
 # Create your views here.
 @csrf_exempt
@@ -78,7 +79,7 @@ def add_new_user(request, _name, _userid, _chatid):
     Gets user info if it exists, otherwise creates new one 
     """
     try:
-        node = Node.objects.get(intent="root")
+        node = Node.objects.get(intent="get-info")
     except Node.DoesNotExist:
         return HttpResponse(status=404)
 
@@ -88,4 +89,27 @@ def add_new_user(request, _name, _userid, _chatid):
 
 
 
+@csrf_exempt
+def get_response(request, _message, _chatid):
+    """ waits until a response from wit ai, it may take so much time !!!!"""
 
+    if request.method == 'GET':
+        intent_ret = None
+        while intent_ret == None :
+            intent_ret = get_Intent(_message)
+
+        curr_user = TelegramUser.objects.get(chatid=_chatid)
+        curr_node = curr_user.currentnode
+
+        print(intent_ret)
+        print(curr_node)
+
+        for i in range(len(curr_node.get_children())):
+            print("intent_ret")
+            print(curr_node.get_children()[i].intent)
+            if intent_ret == curr_node.get_children()[i].intent:
+                curr_user.currentnode=curr_node.get_children()[i]
+                print("here")
+                return JsonResponse(curr_user.currentnode.message, safe=False)
+
+    
