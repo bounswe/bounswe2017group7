@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'conversationtree.apps.ConversationTreeConfig',
     'mptt',
+    'home_page',
 ]
 
 MIDDLEWARE_CLASSES = [
