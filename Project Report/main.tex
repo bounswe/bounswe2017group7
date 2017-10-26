@@ -26,11 +26,19 @@ This file is a project report about Group 7's Book Bot Project for CmpE451 class
 
 \section{Project Description}
 
-  Book Bot Project is an assistant that can help users with everything related to books. It is a bot, and it works via Telegram. Working via Telegram makes the bot more accessible; users don't need to install anything extra and it is cross platform. \\
-  The base and most important functionality is to communicate with natural language. The bot can carry on a conversation with daily English. \\
-  Users can ask the bot about books. They can search books with different keywords, genres or authors, they can filter them in any way they want and they can sort them. They also can get information about specific books, see its current popularity via ratings or read the comments about the book.\\
-  Users can also give the bot feedback about the books they have read. They can comment on a book or rate a book. This will help the bot learn more about what the user likes and help it work more user oriented \\
-  The bot can also recommend the user some books depending on their previous ratings and taste of books.
+ \qquad Book Bot Project is an assistant that can help users with everything related to books. It is a bot, and it works via Telegram. Working via Telegram makes the bot more accessible; users don't need to install anything extra and it is cross platform. \\
+  
+  
+  \quad The base and most important functionality is to communicate with natural language. The bot can carry on a conversation with daily English. \\
+ 
+  
+  \quad Users can ask the bot about books. They can search books with different keywords, genres or authors, they can filter them in any way they want and they can sort them. They also can get information about specific books, see its current popularity via ratings or read the comments about the book.\\
+ 
+  
+  \quad Users can also give the bot feedback about the books they have read. They can comment on a book or rate a book. This will help the bot learn more about what the user likes and help it work more user oriented \\
+ 
+  
+  \quad The bot can also recommend the user some books depending on their previous ratings and taste of books.
 
 \subsection{Project Requirements}
 
@@ -79,10 +87,20 @@ We have defined our project requirements as follows and our customer has agreed 
   \item User Satisfaction: Bot should keep track of the success of its recommendations by tracking the ratings of the recommended books.
   \end{enumerate}
 \end{enumerate}
+\newpage
 
 \subsection{Project Design}
 
-TODO: write project design.
+See Figure \autoref{fig:design}
+
+\begin{figure}[!hb]
+  \includegraphics[width=\linewidth]{figures/design.png}
+  \caption{Project Design}
+  \label{fig:design}
+\end{figure}
+
+
+\newpage
 
 \subsection{Project plan}
 
@@ -134,14 +152,20 @@ Column Name & column value
 \subsection{Deliverable Evaluation}
 TODO: Evaluate
 
+\newpage
 \section{Coding Work}
-TODO: Will be in tabular form. See Table~\ref{tab:codingwork}
+TODO: Will be in tabular form. See Table~\autoref{tab:codingwork}
 
-\begin{table}
+\begin{table}[!hb]
 \centering
 \begin{tabular}{l|r}
 Name & Coding Work \\\hline
-Add your name & add your contribution \\
+Salih Sevgican & GoodReads API implementation \\
+Salih Sevgican & book API class for ease of use \\
+Salih Sevgican & Main Page of the project (Front End)\\
+Salih Sevgican & AWS has been configured for the deployment\\
+Salih Sevgican & Updated requirements.txt\\
+Salih Sevgican & GoodReads compatibility with TelegramBot tested on telegramapi\\
 Add your name & add your contribution
 \end{tabular}
 \caption{\label{tab:codingwork}Coding work table.}
@@ -152,6 +176,9 @@ Add your name & add your contribution
 \subsection{Mptt}
 \subsection{Telegram}
 \subsection{Wit}
+\subsection{GoodReads}
+
+\quad GoodReads API is very useful to make a search about a book by given any kind of keyword. Keyword can be related to author, genre or title, doesn't matter, this api makes a succesfull search every time. We've used a wrapper library for GoodReads API which made easy to write methods for search types. Library is a litlle bit complicated despite it is written to ease our job. Unfortunately not every book is being hold as a same type in goodreads database, some of queries returns arrays with additional information of book such as order number of a book in the book series, and some of queries returns just the name of book. This is an issue we need to handle very well in order to make a great impression with the responds to the bot user.  
 \subsection{AWS}
 
 \section{Summary}
