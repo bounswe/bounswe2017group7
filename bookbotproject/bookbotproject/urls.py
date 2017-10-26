@@ -23,5 +23,6 @@ urlpatterns = [
     url(r'^nodes/(?P<pk>\w+)/$', tree_views.nodes_detail),
     url(r'^getUser/(?P<pk>\w+)/$', tree_views.get_user_info),
     url(r'^addUser/(?P<_name>\w+)/(?P<_userid>\w+)/(?P<_chatid>\w+)/$', tree_views.add_new_user),
+    url(r'^getResponse/(?P<_message>[\w ]+)/(?P<_chatid>[\w ]+)/$', tree_views.get_response),
     url(r'^$', home_views.index),
 ]

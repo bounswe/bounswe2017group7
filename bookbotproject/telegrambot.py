@@ -2,13 +2,10 @@ import json
 import requests
 import time
 import goodReadsApi
-from witapi import get_Intent
-from conversationtree.models import *
-
 
 TOKEN = "433004356:AAFzeqBEW8_UgEPDOnJ8bnQAPitaR7gLSSo";
 URL = 	"https://api.telegram.org/bot{}/".format(TOKEN);
-HOST = "http://18.216.103.59:8000/"
+HOST = "http://127.0.0.1:8000/"
 
 def send_request(url):
 	res = requests.get(url);
@@ -42,12 +39,12 @@ def check_user(name, user_id, chat_id):
 			if r.status_code != 200:
 				print("Error in check_user")
 		except requests.exceptions.RequestException as e:
-			print e 
-		
+			print(e) 
+
 
 def get_last_chat(updates):
 	length = len(updates["result"]);
-	name = updates["result"][length-1]["message"]["from"]["username"];
+	name = updates["result"][length-1]["message"]["from"]["first_name"]
 	user_id = updates["result"][length-1]["message"]["from"]["id"];
 	text = updates["result"][length-1]["message"]["text"];
 	chat_id = updates["result"][length-1]["message"]["chat"]["id"];
@@ -69,7 +66,7 @@ def get_next_message_by_response(text, chat_id):
 	# TODO This should calculate and return next message after wit.ai is ready
 	print(text)
 	"""if intent is determined by the wit.ai we can search by author"""
-	book = goodReadsApi.search_by_genre(text)
+	#book = goodReadsApi.search_by_genre(text)
 	print(book[0])
 	## BUG DETECTED
 	#sometimes these searches returns multiple dimensional arrays. when it happens no message returns to the user. for exmple: make a search_by_author("dan brown")
@@ -77,17 +74,10 @@ def get_next_message_by_response(text, chat_id):
 	return book[0]
 
 def send_message(message, chat_id):
-	response = get_next_message_by_response(message, chat_id);
-	sendURL = URL + "sendMessage?text={}&chat_id={}".format(response, chat_id);
+	#response = get_next_message_by_response(message, chat_id);
+	sendURL = URL + "sendMessage?text={}&chat_id={}".format(message, chat_id);
 	send_request(sendURL);
 
-def getNextNodeMessage(input_text, telegram_user)
-	intent_ret = get_Intent(input_text)
-	curr_node = telegram_user.currentnode
-	for i in range(len(curr_node.get_children()))
-		if(intent_ret == curr_node.get_children()[i].intent)
-			telegram_user.currentnode=curr_node.get_children()[i]
-			return telegram_user.currentnode.message
 
 def main():
 	last_chat = (None, None);
@@ -95,12 +85,12 @@ def main():
 	while True:
 		text, chat, update_id = get_last_chat(get_updates(last_update));
 		if(text, chat) != last_chat:
-			#print(text)
-			### if intent is search book, send 3 messages(for instance 3 popular books need to be sent )
-			send_message(getNextNodeMessage(input_text, telegram_user),chat);
+			r = requests.get(HOST + "getResponse/{}/{}/".format(text, chat))
+			send_message(r.text, chat);
 			print("message sent")
 			last_chat = (text, chat);			
 			last_update = update_id; 
+
 		time.sleep(0.5);
 
 

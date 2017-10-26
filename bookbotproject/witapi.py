@@ -6,19 +6,19 @@ client = Wit(access_token = access_token)
 
 def get_Intent(input_text):
 	response = client.message(input_text)
-
 	intent = None
 	value  = None
+	print(input_text)
 	try:
 		#Find the intent suggested by Wit
 		intent = response['entities'].keys()[0]
-
 		#Find the value in the given text corresponding to that intent
 		value  = response['entities'][intent][0]['value']
 
 	except:
 		pass
-	return intent,value
+
+	return intent
 
 
 #given a file containing train sentences line by line, we may train our app on Wit.ai
