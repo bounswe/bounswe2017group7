@@ -17,10 +17,6 @@ from django.conf.urls import url
 from django.contrib import admin
 from conversationtree import views as tree_views
 from home_page import views as home_views
-<<<<<<< HEAD
-=======
-
->>>>>>> solving merge conflicts
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^nodes/$', tree_views.node_list),
