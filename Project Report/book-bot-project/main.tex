@@ -58,7 +58,7 @@ We have defined our project requirements as follows and our customer has agreed 
   \item User Requirements
     \begin{enumerate}
     \item We will have regular users as Telegram Users.
-    	\begin{enumerate}
+      \begin{enumerate}
         \item Users will be able to get information; search for books, filter them, sort them and read comments about them
         \item Users will be able to give feedback about books; comment on them and rate them.
         \item Users will be able to get book recommendations.
@@ -129,28 +129,28 @@ Book bot is able to recommend books. (Project is finished)
 
 \begin{enumerate}
 
-   \item 	Goodreads API
+   \item  Goodreads API
    
-   \item 	Telegram API	
+   \item  Telegram API  
      
    \item  Node/Conversation Graph
     
-   \item Database Creation	
+   \item Database Creation  
    
- 	\item 	Cloud
- 	
- 	\item Telegram Service(Cloud)
+  \item   Cloud
+  
+  \item Telegram Service(Cloud)
 
- 	 
- 	\item 	Sign-up/Login
- 	
- 	\item 	Settings
- 	
- 	\item	Admin Dashboard
- 	
- 		\item	Viewing Conversation Graph
- 			\item	Testing Demo	
- 			
+   
+  \item   Sign-up/Login
+  
+  \item   Settings
+  
+  \item Admin Dashboard
+  
+    \item Viewing Conversation Graph
+      \item Testing Demo  
+      
  \end{enumerate}
 
 \subsection{Deliverable Status}
@@ -163,7 +163,7 @@ Row Name & Row Name \\\hline
 Goodreads API & Delivered \\
 Telegram API & Delivered \\
 Node/Conversation Graph & Delivered \\
-Database Creation	 & Delivered \\
+Database Creation  & Delivered \\
 Cloud(AWS) & Partially Delivered \\
 Sign-up/Login & Partially Delivered \\
 Settings & Not Delivered\\
@@ -180,7 +180,7 @@ Testing Demo & Partially Delivered
 \begin{enumerate}
   \item It is delivered however we may change this API to Google Books due to latency problems.
    \end{enumerate}
-   \item 	Telegram API
+   \item  Telegram API
    \begin{enumerate}
     \item It is done and since it was the main thing to communicate with users, it was crucial. We build whole structure onto it.
      \end{enumerate}
@@ -188,35 +188,35 @@ Testing Demo & Partially Delivered
    \begin{enumerate}
     \item We have done this, it works properly. The conversation graph is traversed while conversation.
    \end{enumerate}
-   \item Database Creation	
+   \item Database Creation  
    \begin{enumerate}
    \item The database models are created as designed in the design plan.
- 	\end{enumerate}
- 	\item 	Cloud(AWS)
- 	\begin{enumerate}
+  \end{enumerate}
+  \item   Cloud(AWS)
+  \begin{enumerate}
  \item Cloud(AWS) is set up however we couldn't make it work exactly, as it is on our local.
- 	\end{enumerate}
- 	\item 	Sign-up/Login
- 	\begin{enumerate}
- 	\item	It is delivered with the help of DJango interface. We may need to customize this to our needs in the future. 
- 	\end{enumerate}
- 	\item 	Settings
- 	\begin{enumerate}
- \item	We couldn't find energy and time to implement this part. It will be ready on the 2nd milestone. This wasn't on the critical path , so it isn't a big deal to being this deliverable is not delivered.
- 	\end{enumerate}
- 	\item	Admin Dashboard
- 	\begin{enumerate}
- \item	It is delivered with the help of Mptt interface. We may need to customize this to our needs in the future. 
- 		\end{enumerate}
- 		\item	Viewing Conversation Graph
- 		\begin{enumerate}
- 	\item	It is delivered and it was necessary to see conversation trees structure.
- 			\end{enumerate}
- 			\item	Testing Demo
- 			\begin{enumerate}
- 	  \item  We couldn't tested the demo version very well, we planned to put our internal milestone 3 days before the customer milestone to prevent this happen again.
- 	    \end{enumerate}
- 	    \end{enumerate}
+  \end{enumerate}
+  \item   Sign-up/Login
+  \begin{enumerate}
+  \item It is delivered with the help of DJango interface. We may need to customize this to our needs in the future. 
+  \end{enumerate}
+  \item   Settings
+  \begin{enumerate}
+ \item  We couldn't find energy and time to implement this part. It will be ready on the 2nd milestone. This wasn't on the critical path , so it isn't a big deal to being this deliverable is not delivered.
+  \end{enumerate}
+  \item Admin Dashboard
+  \begin{enumerate}
+ \item  It is delivered with the help of Mptt interface. We may need to customize this to our needs in the future. 
+    \end{enumerate}
+    \item Viewing Conversation Graph
+    \begin{enumerate}
+  \item It is delivered and it was necessary to see conversation trees structure.
+      \end{enumerate}
+      \item Testing Demo
+      \begin{enumerate}
+    \item  We couldn't tested the demo version very well, we planned to put our internal milestone 3 days before the customer milestone to prevent this happen again.
+      \end{enumerate}
+      \end{enumerate}
 \newpage
 \section{Coding Work}
 You can find each team member's contribution to the code in the ~\autoref{tab:codingwork}
@@ -274,7 +274,7 @@ Telegram offers HTTP-based interface to do most of the operations that we could 
 \quad GoodReads API is very useful to make a search about a book by given any kind of keyword. Keyword can be related to author, genre or title, doesn't matter, this api makes a succesfull search every time. We've used a wrapper library for GoodReads API which made easy to write methods for search types. Library is a litlle bit complicated despite it is written to ease our job. Unfortunately not every book is being hold as a same type in goodreads database, some of queries returns arrays with additional information of book such as order number of a book in the book series, and some of queries returns just the name of book. This is an issue we need to handle very well in order to make a great impression with the responds to the bot user.  
 \subsection{AWS}
 
-\quad AWS is the service that we use for our project's server need. It is very convenient to start an instance and easy to use. Connection to the Amazon server is very easy on Ubuntu and our group members mostly use Ubuntu. On Ubuntu, by ssh, we can connect to the Amazon server with one line command.We first created an AWS account and then waited for approval of initial payment. Then we launched an EC2 instance on ubuntu and we are given a .pem file. We stored it in a folder and changed its privacy by chmod 400 command. Lastly, we achieved to connect server with given AWS id and ip by ssh on ubuntu. We sent the .pem file to other group members and told the process to them to make them able to connect to the server.
+\quad AWS is the service that we use for our project's server need. It is very convenient to start an instance and easy to use. Connection to the Amazon server is very easy on Ubuntu and our group members mostly use Ubuntu. On Ubuntu, by ssh, we can connect to the Amazon server with one line command.We first created an AWS account and then waited for approval of initial payment. Then we launched an EC2 instance on ubuntu and we are given a .pem file. We stored it in a folder and changed its privacy by chmod 400 command. Lastly, we achieved to connect server with given AWS id and ip by ssh on ubuntu. We sent the .pem file to other group members and told the process to them to make them able to connect to the server. For running our project easily, we changed our ip as elastic ip. We sent our ip address that is associated with our AWS account to all members. So we can mask the failure of an instance by instantly remapping the address to another instance. 
 
 \section{Summary}
 TODO fill
