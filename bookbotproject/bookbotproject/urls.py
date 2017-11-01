@@ -15,13 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from conversationtree import views
-
+from conversationtree import views as tree_views
+from home_page import views as home_views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^nodes/$', views.node_list),
-    url(r'^nodes/(?P<pk>\w+)/$', views.nodes_detail),
-    url(r'^getUser/(?P<pk>\w+)/$', views.get_user_info),
-    url(r'^addUser/(?P<_name>\w+)/(?P<_userid>\w+)/(?P<_chatid>\w+)/$', views.add_new_user),
-    url(r'^getResponse/(?P<_message>[\w ]+)/(?P<_chatid>[\w ]+)/$', views.get_response)
+    url(r'^nodes/$', tree_views.node_list),
+    url(r'^nodes/(?P<pk>\w+)/$', tree_views.nodes_detail),
+    url(r'^getUser/(?P<pk>\w+)/$', tree_views.get_user_info),
+    url(r'^addUser/(?P<_name>\w+)/(?P<_userid>\w+)/(?P<_chatid>\w+)/$', tree_views.add_new_user),
+    url(r'^getResponse/(?P<_message>[\w ]+)/(?P<_chatid>[\w ]+)/$', tree_views.get_response),
+    url(r'^$', home_views.index),
 ]
