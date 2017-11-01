@@ -79,7 +79,7 @@ def add_new_user(request, _name, _userid, _chatid):
     Gets user info if it exists, otherwise creates new one 
     """
     try:
-        node = Node.objects.get(intent="get-info")
+        node = Node.objects.get(intent="root")
     except Node.DoesNotExist:
         return HttpResponse(status=404)
 
@@ -112,7 +112,7 @@ def get_response(request, _message, _chatid):
                 curr_user.save()
                 print("here")
                 return JsonResponse(curr_user.currentnode.message, safe=False)
-
+            
     return JsonResponse(curr_user.currentnode.message, safe=False)
 
     
