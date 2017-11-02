@@ -66,12 +66,12 @@ def get_next_message_by_response(text, chat_id):
 	# TODO This should calculate and return next message after wit.ai is ready
 	print(text)
 	"""if intent is determined by the wit.ai we can search by author"""
-	#book = goodReadsApi.search_by_genre(text)
+	book = goodReadsApi.search_by_genre(text)
 	print(book[0])
 	## BUG DETECTED
 	#sometimes these searches returns multiple dimensional arrays. when it happens no message returns to the user. for exmple: make a search_by_author("dan brown")
 	# we need to handle this bug
-	return book[0]
+	return book[0].title
 
 def send_message(message, chat_id):
 	#response = get_next_message_by_response(message, chat_id);
@@ -80,13 +80,23 @@ def send_message(message, chat_id):
 
 
 def main():
+	counter = 0;
 	last_chat = (None, None);
 	last_update = None;
 	while True:
 		text, chat, update_id = get_last_chat(get_updates(last_update));
 		if(text, chat) != last_chat:
 			r = requests.get(HOST + "getResponse/{}/{}/".format(text, chat))
-			send_message(r.text, chat);
+			print(counter)
+			if r.text == "\"Which genre's books are you looking for?\"" and counter >0 :
+				print("here2")
+				res = get_next_message_by_response(text, chat)
+				send_message(res, chat);
+				counter = 0
+			else:
+				print("here")
+				send_message(r.text, chat);
+				counter = counter+1
 			print("message sent")
 			last_chat = (text, chat);			
 			last_update = update_id; 
