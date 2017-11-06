@@ -30,5 +30,11 @@ def auto_train_by_File(file_):
 	for sentence in sentences:
 		client.message(sentence)
 
+def template_feed_get_json():
+	dict_temps={}
+	for i in range(len(templates)):
+    	dict_temps[templates[i].node.intent]= templates[i].template
+	json_data = json.dumps(dict_temps)	
+    return json_data
 
 		
