@@ -59,5 +59,8 @@ class Comment(models.Model):
     # This comment may or may not be flagged by admins/mods.By default, it is not flagged.
     isFlagged = models.BooleanField(default=False)
 
+    def __unicode__(self):
+        return (("flagged comment #" if self.isFlagged else "default comment #") + str(self.id))
+
     class MPTTMeta:
         order_insertion_by = ['created']
