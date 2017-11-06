@@ -48,3 +48,19 @@ class Template(models.Model):
  
     class MPTTMeta:
         order_insertion_by = ['node']
+
+        
+class Comment(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    # This comment belongs to a user.
+    user = models.ForeignKey(TelegramUser)
+    # This comment has a text.
+    comment = models.CharField(max_length=1000)
+    # This comment may or may not be flagged by admins/mods.By default, it is not flagged.
+    isFlagged = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return (("flagged comment #" if self.isFlagged else "default comment #") + str(self.id))
+
+    class MPTTMeta:
+        order_insertion_by = ['created']
