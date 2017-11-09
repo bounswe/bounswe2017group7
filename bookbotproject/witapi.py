@@ -30,6 +30,10 @@ def auto_train_by_File(file_):
 	for sentence in sentences:
 		client.message(sentence)
 
+
+#This function creates JSON format of intent- template message from our database. 
+#This function will be used to send training data to wit.api
+
 def template_feed_get_json():
 	dict_temps={}
 	for i in range(len(templates)):
