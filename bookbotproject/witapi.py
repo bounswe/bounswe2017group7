@@ -35,10 +35,10 @@ def auto_train_by_File(file_):
 #This function will be used to send training data to wit.api
 
 def template_feed_get_json():
-    dict_temps={}
-    for i in range(len(templates)):
-        dict_temps[templates[i].node.intent] = templates[i].template
-    json_data = json.dumps(dict_temps)	
-    return json_data
+	dict_temps={}
+	for i in range(len(templates)):
+		dict_temps[templates[i].node.intent] = templates[i].template
+	json_data = json.dumps(dict_temps)	
+	return json_data
 
 		
