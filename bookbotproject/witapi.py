@@ -37,8 +37,8 @@ def auto_train_by_File(file_):
 def template_feed_get_json():
 	dict_temps={}
 	for i in range(len(templates)):
-    	dict_temps[templates[i].node.intent]= templates[i].template
+		dict_temps[templates[i].node.intent] = templates[i].template
 	json_data = json.dumps(dict_temps)	
-    return json_data
+	return json_data
 
 		
