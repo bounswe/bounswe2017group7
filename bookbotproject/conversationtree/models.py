@@ -70,6 +70,8 @@ class Comment(models.Model):
     comment = models.CharField(max_length=1000)
     # This comment may or may not be flagged by admins/mods.By default, it is not flagged.
     isFlagged = models.BooleanField(default=False)
+    # This comment is going to belong to a book.
+    book = models.ForeignKey(Book, null=True)
 
     def __unicode__(self):
         return (("flagged comment #" if self.isFlagged else "default comment #") + str(self.id))
