@@ -26,5 +26,6 @@ admin.site.register(Book,
                     ,)
 admin.site.register(Comment,
                     admin.ModelAdmin,
-                    list_display=('__unicode__', 'user', 'comment'),
+                    list_filter=('user', 'book'),
+                    list_display=('__unicode__', 'user', 'comment', 'book'),
                                        list_display_links=('__unicode__',),)
