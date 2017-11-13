@@ -21,8 +21,8 @@ admin.site.register(Template,
 admin.site.register(Book,
                     admin.ModelAdmin,
                     list_filter=('author', ),
-                    list_display=('isbn', 'title', 'author'),
-                    list_display_links=('isbn',)
+                    list_display=('__unicode__', 'author'),
+                    list_display_links=('__unicode__',)
                     ,)
 admin.site.register(Comment,
                     admin.ModelAdmin,

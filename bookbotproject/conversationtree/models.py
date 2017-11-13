@@ -59,6 +59,9 @@ class Book(models.Model):
     # We may know the author of the book.
     author = models.CharField(max_length=1000, blank = True)
     
+    def __unicode__(self):
+        return (str(self.isbn) + " - " + self.title)
+
     class MPTTMeta:
         order_insertion_by = ['title']
 
