@@ -20,12 +20,12 @@ admin.site.register(Template,
                     ,)
 admin.site.register(Book,
                     admin.ModelAdmin,
-                    list_filter=('author', ),
-                    list_display=('__unicode__', 'author'),
+                    list_filter=('author', 'genre'),
+                    list_display=('__unicode__', 'author', 'genre'),
                     list_display_links=('__unicode__',)
                     ,)
 admin.site.register(Comment,
                     admin.ModelAdmin,
                     list_filter=('user', 'book'),
                     list_display=('__unicode__', 'user', 'comment', 'book'),
-                                       list_display_links=('__unicode__',),)
+                    list_display_links=('__unicode__',),)

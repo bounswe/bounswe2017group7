@@ -53,11 +53,13 @@ class Template(models.Model):
 class Book(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     # Every book has unique isbn
-    isbn = models.CharField(max_length=1000)
+    isbn = models.CharField(max_length=100)
     # We may know the title of the book.
-    title = models.CharField(max_length=1000, blank = True)
+    title = models.CharField(max_length=100, blank = True)
     # We may know the author of the book.
-    author = models.CharField(max_length=1000, blank = True)
+    author = models.CharField(max_length=100, blank = True)
+    # We may know the genre of the book.
+    genre = models.CharField(max_length=100, blank = True)
     
     def __unicode__(self):
         return (str(self.isbn) + " - " + self.title)
