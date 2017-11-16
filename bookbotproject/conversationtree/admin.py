@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
-from .models import Node, TelegramUser, Template, Comment
+from .models import Node, TelegramUser, Template, Comment, Book
 
 admin.site.register(Node,
                     MPTTModelAdmin,
@@ -18,7 +18,14 @@ admin.site.register(Template,
                     list_display=('template', 'node',),
                     list_display_links=('template',)
                     ,)
+admin.site.register(Book,
+                    admin.ModelAdmin,
+                    list_filter=('author', 'genre'),
+                    list_display=('__unicode__', 'author', 'genre'),
+                    list_display_links=('__unicode__',)
+                    ,)
 admin.site.register(Comment,
                     admin.ModelAdmin,
-                    list_display=('__unicode__', 'user', 'comment'),
-                                       list_display_links=('__unicode__',),)
+                    list_filter=('user', 'book'),
+                    list_display=('__unicode__', 'user', 'comment', 'book'),
+                    list_display_links=('__unicode__',),)

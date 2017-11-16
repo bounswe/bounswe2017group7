@@ -50,6 +50,23 @@ class Template(models.Model):
         order_insertion_by = ['node']
 
         
+class Book(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    # Every book has unique isbn
+    isbn = models.CharField(max_length=100)
+    # We may know the title of the book.
+    title = models.CharField(max_length=100)
+    # We may know the author of the book.
+    author = models.CharField(max_length=100, blank = True)
+    # We may know the genre of the book.
+    genre = models.CharField(max_length=100, blank = True)
+    
+    def __unicode__(self):
+        return (str(self.isbn) + " - " + self.title)
+
+    class MPTTMeta:
+        order_insertion_by = ['title']
+
 class Comment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     # This comment belongs to a user.
@@ -58,6 +75,8 @@ class Comment(models.Model):
     comment = models.CharField(max_length=1000)
     # This comment may or may not be flagged by admins/mods.By default, it is not flagged.
     isFlagged = models.BooleanField(default=False)
+    # This comment is going to belong to a book.
+    book = models.ForeignKey(Book, null=True)
 
     def __unicode__(self):
         return (("flagged comment #" if self.isFlagged else "default comment #") + str(self.id))
