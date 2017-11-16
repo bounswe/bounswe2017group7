@@ -55,7 +55,7 @@ class Book(models.Model):
     # Every book has unique isbn
     isbn = models.CharField(max_length=100)
     # We may know the title of the book.
-    title = models.CharField(max_length=100, blank = True)
+    title = models.CharField(max_length=100)
     # We may know the author of the book.
     author = models.CharField(max_length=100, blank = True)
     # We may know the genre of the book.
