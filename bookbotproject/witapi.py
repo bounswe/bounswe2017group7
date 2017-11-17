@@ -22,7 +22,6 @@ def get_Intent(input_text):
 
 	return intent
 
-
 #given a file containing train sentences line by line, we may train our app on Wit.ai
 def auto_train_by_File(file_):
 	f = open(file_)
