@@ -6,6 +6,7 @@ sudo pip install pygments
 sudo pip install django-mptt
 sudo pip install requests
 sudo pip install goodreads
+sudo pip install wit
 
 ##INSIDE OF THE goodreads FOLDER ##
 sudo pip install -r requirements.txt
