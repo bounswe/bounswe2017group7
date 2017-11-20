@@ -76,10 +76,26 @@ class Comment(models.Model):
     # This comment may or may not be flagged by admins/mods.By default, it is not flagged.
     isFlagged = models.BooleanField(default=False)
     # This comment is going to belong to a book.
-    book = models.ForeignKey(Book, null=True)
+    book = models.ForeignKey(Book, null = True)
 
     def __unicode__(self):
         return (("flagged comment #" if self.isFlagged else "default comment #") + str(self.id))
+
+    class MPTTMeta:
+        order_insertion_by = ['created']
+
+RATE_CHOICES = [(1,1), (2,2), (3,3), (4,4), (5,5)]
+class Rate(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    # This rate belongs to a user.
+    user = models.ForeignKey(TelegramUser)
+    # This rate has a value.
+    value = models.IntegerField(choices=RATE_CHOICES)
+    # This rate is going to belong to a book.
+    book = models.ForeignKey(Book, null = True)
+
+    def __unicode__(self):
+        return ("Rate of " + self.book.title + " by user " + self.user.name)
 
     class MPTTMeta:
         order_insertion_by = ['created']
