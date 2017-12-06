@@ -44,6 +44,7 @@ class Template(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     # This template belongs to a node.
     node = TreeForeignKey(Node)
+    is_trained = models.BooleanField(default=False)
     template = models.CharField(max_length=500)
  
     class MPTTMeta:
@@ -53,7 +54,7 @@ class Template(models.Model):
 class Book(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     # Every book has unique isbn
-    isbn = models.CharField(max_length=100)
+    isbn = models.CharField(max_length=100, blank = True)
     # We may know the title of the book.
     title = models.CharField(max_length=100)
     # We may know the author of the book.
