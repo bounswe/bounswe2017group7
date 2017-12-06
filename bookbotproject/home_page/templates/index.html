@@ -1,12 +1,125 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!--<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">-->
+<!DOCTYPE html>
 <html lang="en">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <head>
-    <title>Chat-Bot Main Page </title>           
-	
- 
+{% load static %}
+<style>
+body{
+	margin:0;
+	padding: 0;
+	background-color: #F3ECEB;
+}
+#gif{
+	float: right;
+	width:300px;
+	height:500px;
+	margin-left:15px;
+}
+#sc1{
+	display: block;
+	margin:auto;
+	width:600px;
+	height:500px;
+}
+#sc2{
+	display: block;
+	margin:auto;
+	width:600px;
+	height:800px;
+}
+#maindiv{
+	padding: 0px 0px;
+	height: 1000px;
+}
+#h1div{
+	position: fixed;
+	background-color: #417690;
+	width:100%;
+	height: 60px;
+}
+h1{
+	color:#f5dd5d;
+	font-weight: 300;
+	font-size: 24px;
+}
+#bodydiv{
+	padding:0px 5px;
+	position: relative;
+	margin-top:40px;
+	margin-left:10px;
+	width: 95%;
+}
+#linkdiv{
+	position: relative;
+	padding-top: 30px;
+}
+#adminlink:link{
+	display:block;
+	text-align: right;
+	margin-right: 20px; 
+	color:white;
+}
+#adminlink:visited{
+	display:block;
+	text-align: right;
+	margin-right: 20px;
+	color:darkred;
+}
+#adminlink:hover{
+	display:block;
+	text-align: right;
+	margin-right: 20px;
+	color:black;
+}
+#adminlink:active{
+	display:block;
+	text-align: right;
+	margin-right: 20px;
+	color:#DEC7F4;
+}
+h2{
+	display: block;
+	color: darkblue;
+	text-align: left;
+}
+</style>
+<title>Chat-Bot Main Page </title>           
 </head>
+
 <body>
-<p>Welcome to chat bot main page </p>   
-<a href="/admin">Click here to log in</a> 
+{% load static %}
+<div id="maindiv" data-role="page">
+<div id="h1div" data-role="header">
+<h1>Welcome to ChatBot</h1>
+</div>
+<div id="linkdiv">
+<a id="adminlink" href="/admin">Admin/Mod Login</a>
+</div>
+<div id="bodydiv" data-role="main"> 
+<h2>Project Description</h2>
+<p><img id="gif" src={% static 'tlgrm.gif' %}>This project aims to create a platform for book lovers where they interact with the platform in form of the natural language. That is, with the chatbot. This makes the interaction much more natural. People will come to this platform in order to find books, share what they know about books, and explore what other people share.</p>
+
+<p>Like any other similar service, people will search books based on things like title, author, price, year of publication etc. However, since the platform is based on a chatbot, people will be able to specify what they are looking for through a conversation. User can start with explaining what he or she is looking for and then add new constraints in order to reduce the search space. For example, user can say “I am looking for books on Turkish cuisine” and chatbot can respond “there are 100 books on that subject. Would you like to see all?” Then, user may continue and specify, “show me the ones that cost less than 20 dollars”</p>
+
+<p>User may desire to share what he or she knows about certain book or magazine. This can be assigning a rating or label, or writing comment about it. User may also like to make a comment on a certain page, a character in the story, or even a well-known sentence in the book. How many times did you hear the words “To Be or not to be” from the play Hamlet of Shakespeare? People can be fixated on even one sentence from a book and that makes them share with infinite passion. This platform should be able to collect such “passion points” about books from individual users and present them back to any interested person in natural conversation. For example, while user is looking for the classic sci-fi book “Dune”, chatbot can remind him or her what other people share about that book, such as how many people talked about that famous line, “Fear is the mind killer.” and then asks “Would you like to see what they left as a comment?”</p>
+
+<p>Think of a conversation as a tree-shaped graph where its root node is the position representing the start of the conversation and the leaf nodes are separate target actions you want your chatbot to achieve. As your chatbot makes conversation with the user, it starts the traversal from the root node till reaching to one of the leaf nodes, depending on what user wants to achieve during that conversation. Consider nodes along the way to the leaf node as sub-goals before reaching the final goal. The edges connecting these nodes represent conditions or actions you need to satisfy or accomplish in order to reach next sub-goal. For example, chatbot may expect user to say certain thing during specific point in a conversation. If user says that expected response, that can be considered as satisfied condition and chatbot jumps to the next node in the conversation graph. Note that this graph can be more complex than tree-shape actually. In short, this conversation graph represents the decision process of the bot. While interaction with the chatbot is mostly in natural language, you need to develop a user interface to edit and manipulate this conversation graph. Your graph should support certain functionalities in order to express conditions that define how conversation flows from node to node. Basic functionality would be exact string matches or matching with text patterns. You need to design specific annotation schema in order to hold your conversation graph. You can take JSON-LD [1] as an example.</p>
+
+<p>The annotations should be tested to assure validity. JSON-LD should be used for annotation representation as described in the W3C documentation [2]. You can develop your chatbot around Telegram’s Chatbot API. In order to search books, you can use Google Book API.</p>
+
+<p>As expected, open source software with appropriate use permissions may be used, so long as it is properly attributed and documented.</p>
+
+<p>References</p>
+
+<p>Linked data - connect distributed data across the web, 2016: <a style="display: block;" href="http://linkeddata.org/">Click Here To Go To Link</a></p>
+<p>Web annotation data model: <a style="display: block;" href="https://www.w3.org/TR/annotation-model/">Click Here To Go To Link</a>, 2016. Accessed: 2016-04-14.</p>
+<p>Below you can see some screenshots from the ChatBot:</p>
+<img id="sc1" src={% static 'sc1.jpeg' %}>
+<p>You can also use ChatBot on telegram's website:</p>
+<img id="sc2" src={% static 'sc2.png' %}>
+
+</div>
+</div>
 </body>
 </html>
