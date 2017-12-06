@@ -104,9 +104,17 @@ def main():
 			elif r.text == '\"Which book do you want to comment on?\"':
 				comment = text
 				send_message(r.text, chat);
+			elif r.text == '\"Which book do you want to rate?\"':
+				rating = text
+				send_message(r.text, chat);	
 			elif r.text == '\"Your comment is saved!\"':
 				book = text
 				url =  HOST + "addComment/{}/{}/{}/".format(book, user_id, comment)
+				send_message(r.text, chat);
+				r = requests.post(url)
+			elif r.text == '\"Your rating is saved!\"':
+				book = text
+				url =  HOST + "addRating/{}/{}/{}/".format(book, user_id, rating)
 				send_message(r.text, chat);
 				r = requests.post(url)
 			else:
