@@ -105,21 +105,18 @@ def add_comment (  request, _title, _userid, _comment ):
 
 def get_response(request, _message, _chatid):
     """ waits until a response from wit ai, it may take so much time !!!!"""
-    #print('wow')
+
     if request.method == 'GET':
         intent_ret = None
         intent_count = 0
         while intent_ret == None and intent_count<6:
             intent_count = intent_count + 1
-            #print(_message+'THISISINTENT')
             intent_ret = get_Intent(_message)
 
 
         curr_user = TelegramUser.objects.get(chatid=_chatid)
         curr_node = curr_user.currentnode
 
-        #print(intent_ret)
-        #print(curr_node)
         print(curr_node.intent)
         if intent_ret is None and str(curr_node.intent) != 'comment_on_book' and str(curr_node.intent) != 'book_name':
             return JsonResponse('I couldn\'t understand can you express it more simple?', safe=False)
@@ -139,8 +136,6 @@ def get_response(request, _message, _chatid):
             return JsonResponse('Your comment is saved!', safe=False)
         else:   
             for i in range(len(curr_node.get_children())):
-                #print("intent " + intent_ret)
-                #print(curr_node.get_children()[i].intent)
                 if intent_ret == curr_node.get_children()[i].intent:
                     curr_user.currentnode=curr_node.get_children()[i]
                     curr_user.save()

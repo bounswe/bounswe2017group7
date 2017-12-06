@@ -87,16 +87,13 @@ def main():
 	while True:
 
 		text, chat, update_id, user_id = get_last_chat(get_updates(last_update))
-		#print(text)
 		if(text, chat) != last_chat:
 
 			r = requests.get(HOST + "getResponse/{}/{}/".format(text, chat))
-			#print(counter)
 			if end_switch and r.text == '\"Goodbye bookworm!\"':
 				end_switch = True
 			elif r.text == "\"Which genre's books are you looking for?\"" and counter >0 :
 				end_switch = False
-				#print("here2")
 				res = get_next_message_by_response(text, chat)
 				send_message(res, chat);
 				counter = 0
@@ -113,10 +110,8 @@ def main():
 				send_message(r.text, chat);
 				r = requests.post(url)
 			else:
-				#print("here")
 				send_message(r.text, chat);
 				counter = counter+1
-			#print("message sent")
 			last_chat = (text, chat);			
 			last_update = update_id; 
 
