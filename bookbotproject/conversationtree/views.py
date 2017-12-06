@@ -137,22 +137,18 @@ def get_response(request, _message, _chatid):
             curr_user.save()
             return JsonResponse('Goodbye bookworm!', safe=False)
         elif curr_node.intent == 'comment_on_book':
-            print('bunacomment_on_book_if')
             curr_user.currentnode=curr_node.get_children()[0]
             curr_user.save()
             return JsonResponse(curr_user.currentnode.message, safe=False)
         elif curr_node.intent == 'book_name_comment':
-            print('book_if')
             curr_user.currentnode=Node.objects.all()[0]
             curr_user.save()
             return JsonResponse('Your comment is saved!', safe=False)
         elif curr_node.intent == 'rate_book':
-            print('rating_if')
             curr_user.currentnode=curr_node.get_children()[0]
             curr_user.save()
             return JsonResponse(curr_user.currentnode.message, safe=False)
         elif curr_node.intent == 'book_name_rating':
-            print('book_rating_if')
             curr_user.currentnode=Node.objects.all()[0]
             curr_user.save()
             return JsonResponse('Your rating is saved!', safe=False)    
@@ -161,8 +157,6 @@ def get_response(request, _message, _chatid):
                 if intent_ret == curr_node.get_children()[i].intent:
                     curr_user.currentnode=curr_node.get_children()[i]
                     curr_user.save()
-                    #print("here")
-                    print('general')
                     return JsonResponse(curr_user.currentnode.message, safe=False)
             print('general_jose')
             return JsonResponse(curr_user.currentnode.message, safe=False)
