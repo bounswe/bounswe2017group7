@@ -51,7 +51,7 @@ def get_last_chat(updates):
 	update_id = updates["result"][length-1]["update_id"]; 
 	check_user(name, user_id, chat_id)
 
-	return [text, chat_id, update_id];
+	return [text, chat_id, update_id, user_id];
 
 def get_next_message_by_response(text, chat_id):
 	### WARNING ###
@@ -80,24 +80,38 @@ def send_message(message, chat_id):
 
 
 def main():
-	counter = 0;
-	last_chat = (None, None);
-	last_update = None;
+	counter = 0
+	last_chat = (None, None)
+	last_update = None
+	end_switch = False
 	while True:
-		text, chat, update_id = get_last_chat(get_updates(last_update));
+
+		text, chat, update_id, user_id = get_last_chat(get_updates(last_update))
 		if(text, chat) != last_chat:
+
 			r = requests.get(HOST + "getResponse/{}/{}/".format(text, chat))
-			print(counter)
-			if r.text == "\"Which genre's books are you looking for?\"" and counter >0 :
-				print("here2")
+			if end_switch and r.text == '\"Goodbye bookworm!\"':
+				end_switch = True
+			elif r.text == "\"Which genre's books are you looking for?\"" and counter >0 :
+				end_switch = False
 				res = get_next_message_by_response(text, chat)
 				send_message(res, chat);
 				counter = 0
+			elif r.text == '\"Goodbye bookworm!\"':
+				send_message(r.text, chat);
+				counter = 0
+				end_switch = True
+			elif r.text == '\"Which book do you want to comment on?\"':
+				comment = text
+				send_message(r.text, chat);
+			elif r.text == '\"Your comment is saved!\"':
+				book = text
+				url =  HOST + "addComment/{}/{}/{}/".format(book, user_id, comment)
+				send_message(r.text, chat);
+				r = requests.post(url)
 			else:
-				print("here")
 				send_message(r.text, chat);
 				counter = counter+1
-			print("message sent")
 			last_chat = (text, chat);			
 			last_update = update_id; 
 
