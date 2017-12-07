@@ -68,7 +68,13 @@ def get_next_message_by_response(text, chat_id):
 	"""if intent is determined by the wit.ai we can search by author"""
 	book = goodReadsApi.search_by_genre(text)
 	
+	""" Test part and reproducable bug print lines"""
+	print(book[0])
+	print(book[5])
 
+	print("Length is ",len(book))
+
+	print(book)
 	## BUG DETECTED
 	#sometimes these searches returns multiple dimensional arrays. when it happens no message returns to the user. for exmple: make a search_by_author("dan brown")
 	# we need to handle this bug
@@ -86,6 +92,7 @@ def send_message(message, chat_id):
 		sendURL = URL + "sendMessage?text={}&chat_id={}".format(message, chat_id);
 		sendURL = sendURL.replace("#","No:")
 		send_request(sendURL);
+	
 
 
 def main():
@@ -103,9 +110,9 @@ def main():
 				end_switch = True
 			elif r.text == "\"Which genre's books are you looking for?\"" and counter >0 :
 				end_switch = False
+				print("Looking for genre")
 				res = get_next_message_by_response(text, chat)
 				send_message(res, chat);
-
 				counter = 0
 			elif r.text == '\"Goodbye bookworm!\"':
 				send_message(r.text, chat);
@@ -134,6 +141,8 @@ def main():
 			last_update = update_id; 
 
 		time.sleep(0.5);
+	res = get_next_message_by_response(text,chat)
+	send_message(res,chat);
 
 
 if __name__ == '__main__':
