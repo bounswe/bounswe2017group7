@@ -44,7 +44,7 @@ class Template(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     # This template belongs to a node.
     node = TreeForeignKey(Node)
-    is_trained = models.BooleanField(default=False)
+    isTrained = models.BooleanField(default=False)
     template = models.CharField(max_length=500)
  
     class MPTTMeta:

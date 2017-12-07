@@ -161,4 +161,24 @@ def get_response(request, _message, _chatid):
             print('general_jose')
             return JsonResponse(curr_user.currentnode.message, safe=False)
 
+
+@csrf_exempt
+def get_comments(request):
+    """
+    List all comments, or create a new comment.
+    """
+    if request.method == 'GET':
+        comments = Comment.objects.all()
+        serializer = CommentSerializer(comments, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    '''
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = CommentSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+    '''
         
