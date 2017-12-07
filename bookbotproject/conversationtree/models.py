@@ -44,10 +44,7 @@ class Template(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     # This template belongs to a node.
     node = TreeForeignKey(Node)
-<<<<<<< HEAD
-=======
 
->>>>>>> 9bdcc78af8ef3c01383225a96aac3095037797ad
     isTrained = models.BooleanField(default=False)
     template = models.CharField(max_length=500)
  
