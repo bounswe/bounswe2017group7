@@ -73,9 +73,11 @@ def get_next_message_by_response(text, chat_id):
 	# we need to handle this bug
 	return book[0].title
 
-def send_message(message, chat_id):
+def send_message(message, chat_id, reply_markup=""):
 	#response = get_next_message_by_response(message, chat_id);
-	sendURL = URL + "sendMessage?text={}&chat_id={}".format(message, chat_id);
+	sendURL = URL + "sendMessage?text={}&chat_id={}".format(message, chat_id)
+	if reply_markup != "":
+		sendURL = sendURL + "&reply_markup={}".format(reply_markup)
 	send_request(sendURL);
 
 
@@ -109,6 +111,10 @@ def main():
 				url =  HOST + "addComment/{}/{}/{}/".format(book, user_id, comment)
 				send_message(r.text, chat);
 				r = requests.post(url)
+			elif r.text == "\"Get or give information?\"":
+				print("get-give-response")
+				keyboard = '{"inline_keyboard": [[{"text":"Get", "callback_data":"get"},{"text":"Give", "callback_data":"give"}]]}'
+				send_message(r.text, chat, keyboard);
 			else:
 				send_message(r.text, chat);
 				counter = counter+1
