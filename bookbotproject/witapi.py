@@ -35,7 +35,6 @@ def auto_train_by_File(file_):
 		client.message(sentence)
 
 
-
 # communication function between the other parts of the program and wit
 # call this function with database templates to send it to wit
 # this function calls other necessary functions
