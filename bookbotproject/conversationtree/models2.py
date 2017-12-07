@@ -55,7 +55,7 @@ class Template(models.Model):
 class Book(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     # Every book has unique isbn
-    isbn = models.CharField(max_length=100, blank = True)
+    isbn = models.CharField(max_length=100)
     # We may know the title of the book.
     title = models.CharField(max_length=100)
     # We may know the author of the book.
