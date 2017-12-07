@@ -103,6 +103,18 @@ def add_comment (  request, _title, _userid, _comment ):
     newComment = Comment.objects.create( user=_user,comment=_comment, book = commentbook)
     return HttpResponse(status=200)
 
+@csrf_exempt
+def add_rating (  request, _title, _userid, _rating ):
+    try:
+        ratebook = Book.objects.get(title=_title)
+    except:
+        Book.objects.create(title=_title)
+        ratebook = Book.objects.get(title=_title)
+    _user = TelegramUser.objects.get(userid=_userid)
+    newRating = Rate.objects.create( user=_user,value=int(_rating), book = ratebook)
+    return HttpResponse(status=200)
+
+
 def get_response(request, _message, _chatid):
     """ waits until a response from wit ai, it may take so much time !!!!"""
 
@@ -118,29 +130,33 @@ def get_response(request, _message, _chatid):
         curr_node = curr_user.currentnode
 
         print(curr_node.intent)
-        if intent_ret is None and str(curr_node.intent) != 'comment_on_book' and str(curr_node.intent) != 'book_name':
+        if intent_ret is None and str(curr_node.intent) != 'comment_on_book' and str(curr_node.intent) != 'book_name_comment' and str(curr_node.intent) != 'rate_book' and str(curr_node.intent) != 'book_name_rating':
             return JsonResponse('I couldn\'t understand can you express it more simple?', safe=False)
         elif intent_ret == 'end_dialog':
             curr_user.currentnode=Node.objects.all()[0]
             curr_user.save()
             return JsonResponse('Goodbye bookworm!', safe=False)
         elif curr_node.intent == 'comment_on_book':
-            print('bunacomment_on_book_if')
             curr_user.currentnode=curr_node.get_children()[0]
             curr_user.save()
             return JsonResponse(curr_user.currentnode.message, safe=False)
-        elif curr_node.intent == 'book_name':
-            print('book_if')
+        elif curr_node.intent == 'book_name_comment':
             curr_user.currentnode=Node.objects.all()[0]
             curr_user.save()
             return JsonResponse('Your comment is saved!', safe=False)
+        elif curr_node.intent == 'rate_book':
+            curr_user.currentnode=curr_node.get_children()[0]
+            curr_user.save()
+            return JsonResponse(curr_user.currentnode.message, safe=False)
+        elif curr_node.intent == 'book_name_rating':
+            curr_user.currentnode=Node.objects.all()[0]
+            curr_user.save()
+            return JsonResponse('Your rating is saved!', safe=False)    
         else:   
             for i in range(len(curr_node.get_children())):
                 if intent_ret == curr_node.get_children()[i].intent:
                     curr_user.currentnode=curr_node.get_children()[i]
                     curr_user.save()
-                    #print("here")
-                    print('general')
                     return JsonResponse(curr_user.currentnode.message, safe=False)
             print('general_jose')
             return JsonResponse(curr_user.currentnode.message, safe=False)
