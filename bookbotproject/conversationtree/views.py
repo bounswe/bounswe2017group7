@@ -94,22 +94,26 @@ def add_new_user(request, _name, _userid, _chatid):
 
 @csrf_exempt
 def add_comment (  request, _title, _userid, _comment ):
-    try:
-        commentbook = Book.objects.get(title=_title)
-    except:
-        Book.objects.create(title=_title)
-        commentbook = Book.objects.get(title=_title)
-    _user = TelegramUser.objects.get(userid=_userid)
-    newComment = Comment.objects.create( user=_user,comment=_comment, book = commentbook)
-    return HttpResponse(status=200)
+    _title_conv = _title.replace('_', ' ')
+    _comment_conv =_comment.replace('_', ' ')
+    if request.method == 'POST':
+        try:
+            commentbook = Book.objects.get(title=_title_conv)
+        except:
+            Book.objects.create(title=_title_conv)
+            commentbook = Book.objects.get(title=_title_conv)
+        _user = TelegramUser.objects.get(userid=_userid)
+        newComment = Comment.objects.create( user=_user,comment=_comment_conv, book = commentbook)
+        return HttpResponse(status=200)
 
 @csrf_exempt
 def add_rating (  request, _title, _userid, _rating ):
+    _title_conv = _title.replace('_', ' ')
     try:
-        ratebook = Book.objects.get(title=_title)
+        ratebook = Book.objects.get(title=_title_conv)
     except:
-        Book.objects.create(title=_title)
-        ratebook = Book.objects.get(title=_title)
+        Book.objects.create(title=_title_conv)
+        ratebook = Book.objects.get(title=_title_conv)
     _user = TelegramUser.objects.get(userid=_userid)
     newRating = Rate.objects.create( user=_user,value=int(_rating), book = ratebook)
     return HttpResponse(status=200)
