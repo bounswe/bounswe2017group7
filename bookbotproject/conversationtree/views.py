@@ -151,7 +151,11 @@ def get_response(request, _message, _chatid):
         elif curr_node.intent == 'book_name_rating':
             curr_user.currentnode=Node.objects.all()[0]
             curr_user.save()
-            return JsonResponse('Your rating is saved!', safe=False)    
+            return JsonResponse('Your rating is saved!', safe=False)
+        elif curr_node.intent == 'genre_return':
+            curr_user.currentnode=Node.objects.all()[0]
+            curr_user.save()
+            return JsonResponse('I\'m returning a list', safe=False)    
         else:   
             for i in range(len(curr_node.get_children())):
                 if intent_ret == curr_node.get_children()[i].intent:

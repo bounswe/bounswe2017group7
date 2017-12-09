@@ -77,7 +77,7 @@ def get_next_message_by_response(text, chat_id):
 def send_message(message, chat_id):
 	#response = get_next_message_by_response(message, chat_id);
 	if(isinstance(message,list)):
-		for index in message :
+		for index in message:
 			sendURL = URL + "sendMessage?text={}&chat_id={}".format(index, chat_id);
 			sendURL = sendURL.replace("#","No:")
 			send_request(sendURL);
@@ -101,11 +101,10 @@ def main():
 			r = requests.get(HOST + "getResponse/{}/{}/".format(text, chat))
 			if end_switch and r.text == '\"Goodbye bookworm!\"':
 				end_switch = True
-			elif r.text == "\"Which genre's books are you looking for?\"" and counter >0 :
+			elif r.text == "\"Which genre's books are you looking for?\"" :
 				end_switch = False
 				res = get_next_message_by_response(text, chat)
 				send_message(res, chat);
-
 				counter = 0
 			elif r.text == '\"Goodbye bookworm!\"':
 				send_message(r.text, chat);
