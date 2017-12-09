@@ -40,6 +40,25 @@ This file is a project report about Group 7's Book Bot Project for CmpE451 class
   
   \quad The bot can also recommend the user some books depending on their previous ratings and taste of books.
 
+\section{Project Requirements}
+
+\qquad While implementing the project we've realized that some of the requirements needs some modification in order to work convenient and clean with the tools and frameworks that we're using. The followings are the requirements that we decided to modify. 
+\begin{enumerate}
+
+ 	\item 1.2.1.1.1.1.3-4-6-7-8-9 are removed\\
+ 	Reason: We can only get information with the keywords of author, title and genre by using GoodReads API.
+ 	
+ 	\item 1.2.1.1.4.3 is removed \\
+ 	Reason: Since we're not getting publish date information, we cannot sort incoming data according to this feature.(GoodReads API)
+ 	
+    \item 1.2.3.2.2 is removed \\
+    Reason: Our backend system is not compatible for storing images and also our frontend side doesn't support showing images.(Django Framework)
+    
+    \item 1.2.2.1.2 and 1.2.3.1.2 are removed. 
+    Reason: Signing up with invitation codes is not a necessary function, Admin can create a user credentials with specified type of user.
+    
+ 			
+ \end{enumerate}
 
 
 \section{Project Milestones}
@@ -99,13 +118,13 @@ Wit Training from Admin Dashboard & Partially Delivered \\
 \begin{enumerate}
 \item Bot working on the cloud \& Delivered 
 \begin{enumerate}
-  \item It is working now. However we should not run more than one server at one time.
+  \item It is working now. However we should not run more than one server at one time (Even if it is a localhost, it confuses the chatbot).
    \end{enumerate}
    \item Plan Tool Replacement
    \begin{enumerate}
     \item We couldn't utilize it too much, but the tool is working properly and old plan is transferred here.
      \end{enumerate}
-   \item Giving Rating \& Delivered \\
+   \item Giving Rating \& Delivered 
    \begin{enumerate}
     \item This feature is working as it was expected. It creates the rating directly if the database have the book. If the book is not in our database. First book is created and then its rating inserted on the database.
    \end{enumerate}
@@ -141,13 +160,16 @@ You can find each team member's contribution to the code in the ~\autoref{tab:co
 \centering
 \begin{tabular}{l|r}
 Name & Coding Work \\\hline
-Ali Goksu Ozkan & Giving Comment to the databse \\
+Ali Goksu Ozkan & Giving Comment to the database \\
 & Giving Rating to the database \\
 & Implemented Json format of intent-template sentence data \\\hline
 Irmak Kavasoglu & Created Comment data structure \\
 & Created Rate data structure \\
 & Created Book data structure \\
-& Added AdminUser, ModeratorUser types to admin panel
+& Added AdminUser, ModeratorUser types to admin panel \\\hline
+Salih Sevgican & Fixed GoodReads API not giving info properly \\
+& Created a copied test file for TelegramBot \\
+& Created test users for AdminUser, fixed AdminUser not working properly
 \end{tabular}
 \caption{\label{tab:codingwork}Coding work table.}
 \end{table}
