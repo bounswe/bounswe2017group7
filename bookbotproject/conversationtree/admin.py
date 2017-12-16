@@ -21,7 +21,7 @@ admin.site.register(Template,
 admin.site.register(Book,
                     admin.ModelAdmin,
                     list_filter=('author', 'genre'),
-                    list_display=('__unicode__', 'author', 'genre'),
+                    list_display=('__unicode__', 'author', 'genre', 'avg_rating', 'count'),
                     list_display_links=('__unicode__',)
                     ,)
 admin.site.register(Comment,
@@ -31,6 +31,5 @@ admin.site.register(Comment,
                     list_display_links=('__unicode__',),)
 admin.site.register(Rate,
                     admin.ModelAdmin,
-                    list_filter=('user', 'book'),
-                    list_display=('__unicode__', 'value', 'user', 'book'),
+                    list_display=('__unicode__', 'value', 'user_id', 'book_title'),
                     list_display_links=('__unicode__',),)

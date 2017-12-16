@@ -14,6 +14,7 @@ from serializers import NodeSerializer
 from conversationtree.models import TelegramUser
 from serializers import TelegramUserSerializer
 from witapi import *
+#import recommend
 
 # Create your views here.
 @csrf_exempt
@@ -121,7 +122,7 @@ def add_comment (  request, _title, _userid, _comment ):
             Book.objects.create(title=_title_conv)
             commentbook = Book.objects.get(title=_title_conv)
         _user = TelegramUser.objects.get(userid=_userid)
-        newComment = Comment.objects.create( user=_user,comment=_comment_conv, book = commentbook)
+        newComment = Comment.objects.create( user=_user,comment=_comment_conv, book = _title_conv)
         return HttpResponse(status=200)
 
 @csrf_exempt
@@ -129,12 +130,20 @@ def add_rating (  request, _title, _userid, _rating ):
     _title_conv = _title.replace('_', ' ')
     try:
         ratebook = Book.objects.get(title=_title_conv)
+        _count = ratebook.count
+        _avg_rating = ratebook.avg_rating
+        new_rating = (((_avg_rating*_count)+int(_rating))/(_count+1))
+        Book.objects.filter(title=_title_conv).update(avg_rating=new_rating)
+        Book.objects.filter(title=_title_conv).update(count=_count+1)
     except:
-        Book.objects.create(title=_title_conv)
+        Book.objects.create(title=_title_conv, avg_rating=_rating,count=1)
         ratebook = Book.objects.get(title=_title_conv)
+    
     _user = TelegramUser.objects.get(userid=_userid)
-    newRating = Rate.objects.create( user=_user,value=int(_rating), book = ratebook)
+    newRating = Rate.objects.create( user_id=_user.userid,value=int(_rating), book_title = _title_conv)
+
     return HttpResponse(status=200)
+#def get_recommendation():
 
 
 def get_response(request, _message, _chatid):
@@ -174,6 +183,10 @@ def get_response(request, _message, _chatid):
             curr_user.currentnode=Node.objects.all()[0]
             curr_user.save()
             return JsonResponse('Your rating is saved!', safe=False)    
+        elif curr_node.intent == 'recommendation':
+            curr_user.currentnode=Node.objects.all()[0]
+            curr_user.save()
+            return JsonResponse(get_recommendation, safe=False)
         else:   
             for i in range(len(curr_node.get_children())):
                 if intent_ret == curr_node.get_children()[i].intent:

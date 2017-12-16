@@ -56,12 +56,13 @@ class Book(models.Model):
     # Every book has unique isbn
     isbn = models.CharField(max_length=100, blank = True)
     # We may know the title of the book.
-    title = models.CharField(max_length=100)
+    title = models.CharField(unique=True, max_length=100)
     # We may know the author of the book.
     author = models.CharField(max_length=100, blank = True)
     # We may know the genre of the book.
     genre = models.CharField(max_length=100, blank = True)
-    
+    avg_rating = models.FloatField(null = True,blank=True)
+    count = models.IntegerField(null = True,blank=True)
     def __unicode__(self):
         return (str(self.isbn) + " - " + self.title)
 
@@ -89,14 +90,15 @@ RATE_CHOICES = [(1,1), (2,2), (3,3), (4,4), (5,5)]
 class Rate(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     # This rate belongs to a user.
-    user = models.ForeignKey(TelegramUser)
+    user_id = models.IntegerField(null = True)
     # This rate has a value.
     value = models.IntegerField(choices=RATE_CHOICES)
     # This rate is going to belong to a book.
-    book = models.ForeignKey(Book, null = True)
-
+    #book = models.ForeignKey(Book, null = True)
+    book_title = models.CharField(max_length=200,null = True)
+    
     def __unicode__(self):
-        return ("Rate of " + self.book.title + " by user " + self.user.name)
+        return ("Rate of " + self.book_title + " by user " + str(self.user_id))
 
     class MPTTMeta:
         order_insertion_by = ['created']

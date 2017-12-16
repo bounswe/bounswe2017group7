@@ -133,8 +133,6 @@ def main():
 				url =  HOST + "addRating/{}/{}/{}/".format(book.replace(' ', '_'), user_id, rating)
 				send_message(r.text, chat);
 				r = requests.post(url)
-			elif current_node_intent == 'recommendation':
-				
 			else:
 				send_message(r.text, chat);
 				counter = counter+1
