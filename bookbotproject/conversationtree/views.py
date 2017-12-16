@@ -75,6 +75,24 @@ def get_user_info(request, pk):
         serializer = TelegramUserSerializer(user)
         return JsonResponse(serializer.data)
 
+@csrf_exempt
+def get_current_node(request, _userid):
+    """
+    Gets current node of user
+    """
+    try:
+        curr_node_intent = TelegramUser.objects.get(userid=_userid).currentnode.intent
+    except TelegramUser.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        intent=  "{\"intent\""+":\""+ curr_node_intent+"\"}"
+        #{"name":"john","age":22,"class":"mca"}
+        bytes = intent.encode('utf-8')
+        print intent
+        return HttpResponse(bytes, content_type='application/json')
+
+
 
 @csrf_exempt
 def add_new_user(request, _name, _userid, _chatid):

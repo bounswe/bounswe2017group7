@@ -26,5 +26,6 @@ urlpatterns = [
     url(r'^addComment/(?P<_title>\w+)/(?P<_userid>\w+)/(?P<_comment>\w+)/$', tree_views.add_comment),
     url(r'^addRating/(?P<_title>\w+)/(?P<_userid>\w+)/(?P<_rating>\w+)/$', tree_views.add_rating),
     url(r'^getResponse/(?P<_message>[\w ]+)/(?P<_chatid>[\w ]+)/$', tree_views.get_response),
+    url(r'^getCurrentNode/(?P<_userid>\w+)/$', tree_views.get_current_node),
     url(r'^$', home_views.index),
 ]
