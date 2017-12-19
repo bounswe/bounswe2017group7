@@ -96,6 +96,12 @@ def main():
 	while True:
 
 		text, chat, update_id, user_id = get_last_chat(get_updates(last_update))
+
+		current_Node_r = requests.get(HOST + "getCurrentNode/{}/".format(user_id))		
+		json_response = json.loads(current_Node_r.content)
+
+		current_node_intent = json_response['intent']
+		#print current_node_intent
 		if(text, chat) != last_chat:
 
 			r = requests.get(HOST + "getResponse/{}/{}/".format(text, chat))
@@ -110,12 +116,12 @@ def main():
 				send_message(r.text, chat);
 				counter = 0
 				end_switch = True
-			elif r.text == '\"Which book do you want to comment on?\"':
+			elif current_node_intent == 'comment_on_book':
 				comment = text
 				send_message(r.text, chat);
-			elif r.text == '\"Which book do you want to rate?\"':
+			elif current_node_intent == 'rate_book':
 				rating = text
-				send_message(r.text, chat);	
+				send_message(r.text, chat);
 			elif r.text == '\"Your comment is saved!\"':
 				book = text
 				url =  HOST + "addComment/{}/{}/{}/".format(book, user_id, comment)

@@ -14,6 +14,7 @@ from serializers import NodeSerializer
 from conversationtree.models import TelegramUser
 from serializers import TelegramUserSerializer
 from witapi import *
+#import recommend
 
 # Create your views here.
 @csrf_exempt
@@ -75,6 +76,24 @@ def get_user_info(request, pk):
         serializer = TelegramUserSerializer(user)
         return JsonResponse(serializer.data)
 
+@csrf_exempt
+def get_current_node(request, _userid):
+    """
+    Gets current node of user
+    """
+    try:
+        curr_node_intent = TelegramUser.objects.get(userid=_userid).currentnode.intent
+    except TelegramUser.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        intent=  "{\"intent\""+":\""+ curr_node_intent+"\"}"
+        #{"name":"john","age":22,"class":"mca"}
+        bytes = intent.encode('utf-8')
+        print intent
+        return HttpResponse(bytes, content_type='application/json')
+
+
 
 @csrf_exempt
 def add_new_user(request, _name, _userid, _chatid):
@@ -94,25 +113,37 @@ def add_new_user(request, _name, _userid, _chatid):
 
 @csrf_exempt
 def add_comment (  request, _title, _userid, _comment ):
-    try:
-        commentbook = Book.objects.get(title=_title)
-    except:
-        Book.objects.create(title=_title)
-        commentbook = Book.objects.get(title=_title)
-    _user = TelegramUser.objects.get(userid=_userid)
-    newComment = Comment.objects.create( user=_user,comment=_comment, book = commentbook)
-    return HttpResponse(status=200)
+    _title_conv = _title.replace('_', ' ')
+    _comment_conv =_comment.replace('_', ' ')
+    if request.method == 'POST':
+        try:
+            commentbook = Book.objects.get(title=_title_conv)
+        except:
+            Book.objects.create(title=_title_conv)
+            commentbook = Book.objects.get(title=_title_conv)
+        _user = TelegramUser.objects.get(userid=_userid)
+        newComment = Comment.objects.create( user=_user,comment=_comment_conv, book = _title_conv)
+        return HttpResponse(status=200)
 
 @csrf_exempt
 def add_rating (  request, _title, _userid, _rating ):
+    _title_conv = _title.replace('_', ' ')
     try:
-        ratebook = Book.objects.get(title=_title)
+        ratebook = Book.objects.get(title=_title_conv)
+        _count = ratebook.count
+        _avg_rating = ratebook.avg_rating
+        new_rating = (((_avg_rating*_count)+int(_rating))/(_count+1))
+        Book.objects.filter(title=_title_conv).update(avg_rating=new_rating)
+        Book.objects.filter(title=_title_conv).update(count=_count+1)
     except:
-        Book.objects.create(title=_title)
-        ratebook = Book.objects.get(title=_title)
+        Book.objects.create(title=_title_conv, avg_rating=_rating,count=1)
+        ratebook = Book.objects.get(title=_title_conv)
+    
     _user = TelegramUser.objects.get(userid=_userid)
-    newRating = Rate.objects.create( user=_user,value=int(_rating), book = ratebook)
+    newRating = Rate.objects.create( user_id=_user.userid,value=int(_rating), book_title = _title_conv)
+
     return HttpResponse(status=200)
+#def get_recommendation():
 
 
 def get_response(request, _message, _chatid):
@@ -151,11 +182,11 @@ def get_response(request, _message, _chatid):
         elif curr_node.intent == 'book_name_rating':
             curr_user.currentnode=Node.objects.all()[0]
             curr_user.save()
-            return JsonResponse('Your rating is saved!', safe=False)
-        elif curr_node.intent == 'genre_return':
+            return JsonResponse('Your rating is saved!', safe=False)    
+        elif curr_node.intent == 'recommendation':
             curr_user.currentnode=Node.objects.all()[0]
             curr_user.save()
-            return JsonResponse('I\'m returning a list', safe=False)    
+            return JsonResponse(get_recommendation, safe=False)
         else:   
             for i in range(len(curr_node.get_children())):
                 if intent_ret == curr_node.get_children()[i].intent:
