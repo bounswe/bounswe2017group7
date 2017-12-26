@@ -293,6 +293,26 @@ def predict(_userid, averages, T):
                 if len(similarusers)>3:
                     break
 
+    prediction = averages[userId]
+    simeff=0
+    simsum=0
+    fivestars={}
+    fourstars={}
+
+    #print similarusers.keys()
+    for simus in similarusers.keys():
+        rates=Rate.objects.get(user_id=simus)
+        for i in range(len(Rate.objects.get(user_id=simus))):
+            if(Rate.objects.filter(user_id=simus)[i].value==5):
+                fivestars.append(Rate.objects.filter(user_id=simus)[i].book_title)
+            elif(Rate.objects.filter(user_id=simus)[i].value==4):
+                fourstars.append(Rate.objects.filter(user_id=simus)[i].book_title)
+    
+    if len(fivestars)>2:
+        return fivestars
+    elif: 
+        return fivestars.append(fourstars)
+
 
 #recommendation part ends
 #recommendation part ends
