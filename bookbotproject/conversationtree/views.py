@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.core.exceptions import MultipleObjectsReturned
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from conversationtree.models import Node
@@ -145,6 +146,48 @@ def add_rating (  request, _title, _userid, _rating ):
     return HttpResponse(status=200)
 #def get_recommendation():
 
+@csrf_exempt
+def get_comments(request,book):
+    """
+    Returns comments of a given book 
+    """ 
+
+    try:
+        b = Book.objects.get(title=book)
+    except Book.DoesNotExist:
+        return HttpResponse(status=404)
+
+    try:
+        comments = Comment.objects.get(book=b)
+    except Comment.DoesNotExist:
+        return HttpResponse(status=404)
+    except MultipleObjectsReturned:
+        comments = Comment.objects.filter(book=b).filter(isFlagged=False)
+
+
+    if request.method == 'GET':
+        comment_json="{\"comments\""+":["
+        for c in comments:
+            comment_json += "{\"comment\":" + str(c.comment) + "},"
+
+        comment_json = comment_json[:-1] + "]}"
+        return HttpResponse(comment_json, content_type='application/json')
+
+@csrf_exempt
+def get_average_rating(request,book):
+    """
+    Returns average rating of a given book 
+    """ 
+
+    try:
+        b = Book.objects.get(title=book)
+    except Book.DoesNotExist:
+        return HttpResponse(status=404)
+
+
+    if request.method == 'GET':
+        rate_json = "{\"average rating\""+":\""+ str(b.avg_rating)+"\"}"
+        return HttpResponse(rate_json, content_type='application/json')
 
 def get_response(request, _message, _chatid):
     """ waits until a response from wit ai, it may take so much time !!!!"""
