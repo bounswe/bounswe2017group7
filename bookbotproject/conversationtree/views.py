@@ -145,6 +145,118 @@ def add_rating (  request, _title, _userid, _rating ):
     return HttpResponse(status=200)
 #def get_recommendation():
 
+@csrf_exempt
+def get_comments(request,book):
+    """
+    Returns comments of a given book 
+    """ 
+
+    try:
+        b = Book.objects.get(title=book)
+    except Book.DoesNotExist:
+        return HttpResponse(status=404)
+
+    try:
+        comments = Comment.objects.filter(book=b).filter(isFlagged=False)
+    except Comment.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        comment_json="{\"comments\""+":["
+        for c in comments:
+            comment_json += "{\"comment\":" + str(c.comment) + "},"
+
+        comment_json = comment_json[:-1] + "]}"
+        return HttpResponse(comment_json, content_type='application/json')
+
+@csrf_exempt
+def get_average_rating(request,book):
+    """
+    Returns comments of a given book 
+    """ 
+
+    try:
+        b = Book.objects.get(title=book)
+    except Book.DoesNotExist:
+        return HttpResponse(status=404)
+
+    try:
+        rates = Rate.objects.filter(book=b)
+    except Rate.DoesNotExist:
+        return HttpResponse(status=404)
+
+
+    if request.method == 'GET':
+        avg_rating=0.0
+        for r in rates:
+            avg_rating += r.value
+
+        avg_rating = avg_rating/len(rates)
+        rate_json = "{\"average rating\""+":\""+ str(avg_rating)+"\"}"
+        return HttpResponse(rate_json, content_type='application/json')
+
+
+
+#recommendation part starts
+#recommendation part starts
+#recommendation part starts
+
+class Table(dict):
+    
+    def __init__(self):
+        self.value_indices = {}
+    
+    def set(self, i, j, v):
+        self[(i, j)] = v
+        if i in self.value_indices:
+            self.value_indices[i].add(j)
+        else:
+            self.value_indices[i] = set([j])
+        
+    def read(self, i, j):
+        return self.get((i, j), None)
+    
+    def hasValues(self, i):
+        idx = self.value_indices.get(i, None)
+        return idx
+
+def importer(T):
+    for i in range (len(Rate.objects.all())):
+        tempRate = Rate.objects.all()[i]
+        userid = tempRate.user_id
+        booktitle = tempRate.book_title
+        rating = tempRate.value
+        #print userid, booktitle, rating
+        T.set(userid, booktitle, rating)
+
+def averagecalc(T):
+    it = sorted(T.items())
+    #print len(it)
+    sums= {}
+    counts= {}
+    for i in it:
+        #print i
+        user=i[0][0]
+        rating=i[1]
+        if user in sums:
+            sums[user]= sums[user]+rating
+            counts[user]= counts[user]+1
+        else:
+            sums[user]= rating
+            counts[user]=1
+
+    sumlist=sorted(sums.items())
+    averages={}
+    for user in sumlist:
+        averages[user[0]]=sums[user[0]]/counts[user[0]]
+    return averages
+
+
+
+#recommendation part ends
+#recommendation part ends
+#recommendation part ends
+#recommendation part ends
 
 def get_response(request, _message, _chatid):
     """ waits until a response from wit ai, it may take so much time !!!!"""
