@@ -145,6 +145,30 @@ def add_rating (  request, _title, _userid, _rating ):
     return HttpResponse(status=200)
 #def get_recommendation():
 
+@csrf_exempt
+def get_comments(request,book):
+    """
+    Returns comments of a given book 
+    """ 
+
+    try:
+        b = Book.objects.get(title=book)
+    except Book.DoesNotExist:
+        return HttpResponse(status=404)
+
+    try:
+        comments = Comment.objects.filter(book=b).filter(isFlagged=False)
+    except Comment.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        comment_json="{\"comments\""+":["
+        for c in comments:
+            comment_json += "{\"comment\":" + str(c.comment) + "},"
+
+        comment_json = comment_json[:-1] + "]}"
+        return HttpResponse(comment_json, content_type='application/json')
+
 
 def get_response(request, _message, _chatid):
     """ waits until a response from wit ai, it may take so much time !!!!"""
