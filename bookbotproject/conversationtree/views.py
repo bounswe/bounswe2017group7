@@ -169,6 +169,31 @@ def get_comments(request,book):
         comment_json = comment_json[:-1] + "]}"
         return HttpResponse(comment_json, content_type='application/json')
 
+@csrf_exempt
+def get_average_rating(request,book):
+    """
+    Returns comments of a given book 
+    """ 
+
+    try:
+        b = Book.objects.get(title=book)
+    except Book.DoesNotExist:
+        return HttpResponse(status=404)
+
+    try:
+        rates = Rate.objects.filter(book=b)
+    except Rate.DoesNotExist:
+        return HttpResponse(status=404)
+
+
+    if request.method == 'GET':
+        avg_rating=0.0
+        for r in rates:
+            avg_rating += r.value
+
+        avg_rating = avg_rating/len(rates)
+        rate_json = "{\"average rating\""+":\""+ str(avg_rating)+"\"}"
+        return HttpResponse(rate_json, content_type='application/json')
 
 def get_response(request, _message, _chatid):
     """ waits until a response from wit ai, it may take so much time !!!!"""

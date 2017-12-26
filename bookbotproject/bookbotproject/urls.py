@@ -28,5 +28,6 @@ urlpatterns = [
     url(r'^getResponse/(?P<_message>[\w ]+)/(?P<_chatid>[\w ]+)/$', tree_views.get_response),
     url(r'^getCurrentNode/(?P<_userid>\w+)/$', tree_views.get_current_node),
     url(r'^getComments/(?P<book>\w+)/$', tree_views.get_comments),
+    url(r'^getAverageRating/(?P<book>\w+)/$', tree_views.get_average_rating),
     url(r'^$', home_views.index),
 ]
