@@ -176,7 +176,7 @@ def get_comments(request,book):
 @csrf_exempt
 def get_average_rating(request,book):
     """
-    Returns comments of a given book 
+    Returns average rating of a given book 
     """ 
 
     try:
@@ -184,19 +184,9 @@ def get_average_rating(request,book):
     except Book.DoesNotExist:
         return HttpResponse(status=404)
 
-    try:
-        rates = Rate.objects.filter(book=b)
-    except Rate.DoesNotExist:
-        return HttpResponse(status=404)
-
 
     if request.method == 'GET':
-        avg_rating=0.0
-        for r in rates:
-            avg_rating += r.value
-
-        avg_rating = avg_rating/len(rates)
-        rate_json = "{\"average rating\""+":\""+ str(avg_rating)+"\"}"
+        rate_json = "{\"average rating\""+":\""+ str(b.avg_rating)+"\"}"
         return HttpResponse(rate_json, content_type='application/json')
 
 def get_response(request, _message, _chatid):
