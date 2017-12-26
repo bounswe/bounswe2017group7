@@ -251,6 +251,47 @@ def averagecalc(T):
         averages[user[0]]=sums[user[0]]/counts[user[0]]
     return averages
 
+def predict(_userid, averages, T):
+
+    
+
+    userId = user
+    
+
+    v1=T.hasValues(userId)
+    #print len(v1)
+    #print('NOW SIMILARITIES!!')
+    similarusers={}
+
+
+
+    for j in sorted(averages.items()):
+        simId = j[0]
+        v2 = T.hasValues(simId)
+        if userId != j[0] :
+
+            myuser=[]
+            simuser=[]
+            similarity=0
+            overlap = v1.intersection(v2)
+            for i in overlap:
+                #  print 'col {}: '.format(i), T.read(2, i), T.read(1, i)
+                myuser.append(T.read(userId, i) - averages[userId])
+                simuser.append(T.read(simId,i)- averages[simId])
+
+            myuserdot=numpy.array(myuser)
+            simuserdot=numpy.array(simuser)
+            dividend= numpy.dot(myuserdot.T, simuserdot)
+            divider= math.sqrt(numpy.dot(myuserdot.T, myuserdot))*math.sqrt(numpy.dot(simuserdot.T, simuserdot))
+            if divider!=0:
+                similarity= dividend/divider
+
+            if math.fabs(similarity)>0.5: #and float(len(overlap))/float(len(v1))>0.05:
+                #print len(overlap)
+                #print "%.3f "%similarity +' with intersection; '+ str(overlap)
+                similarusers[simId]=similarity
+                if len(similarusers)>3:
+                    break
 
 
 #recommendation part ends
