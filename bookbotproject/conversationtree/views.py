@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.core.exceptions import MultipleObjectsReturned
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from conversationtree.models import Node
@@ -157,9 +158,12 @@ def get_comments(request,book):
         return HttpResponse(status=404)
 
     try:
-        comments = Comment.objects.filter(book=b).filter(isFlagged=False)
+        comments = Comment.objects.get(book=b)
     except Comment.DoesNotExist:
         return HttpResponse(status=404)
+    except MultipleObjectsReturned:
+        comments = Comment.objects.filter(book=b).filter(isFlagged=False)
+
 
     if request.method == 'GET':
         comment_json="{\"comments\""+":["
