@@ -1,6 +1,9 @@
 from wit import Wit
 import json
 import requests
+from conversationtree.models import Template
+from django.db import models
+
 
 access_token = "4UYTKEFBNBC7PKBSEHZL5KJ3MSKYALZ4"
 client = Wit(access_token = access_token)
@@ -10,6 +13,7 @@ def get_Intent(input_text):
 	response = client.message(input_text)
 	intent = None
 	value  = None
+	print(input_text)
 	try:
 		#Find the intent suggested by Wit
 		intent = response['entities'].keys()[0]
@@ -31,12 +35,11 @@ def auto_train_by_File(file_):
 		client.message(sentence)
 
 
-
 # communication function between the other parts of the program and wit
 # call this function with database templates to send it to wit
 # this function calls other necessary functions
 def send_data_to_wit(templates):
-	tuples = prepare_tuples_from_templates(templates)	
+	tuples = prepare_tuples_from_templates()	
 	json_data = prepare_json_to_train(tuples)
 	send_request_to_wit(json_data)
 
@@ -90,10 +93,14 @@ def prepare_json_to_train(template_Tuples):
 	return x
 
 # prepares the three tuples to be used for preparation of json_datax
-def prepare_tuples_from_templates(templates):
+def prepare_tuples_from_templates():
+	#This line retrieves all untrained templates from database,
+	templates = Template.objects.get(isTrained=False)
 	template_Tuples = []
-	for i in range(len(templates)):
-		template_Sentence = templates[i].template
-		template_Tuples.append((template_Sentence.replace('*',''),templates[i].node.intent,extract_keyword(template_Sentence)))
+	for t in templates:
+		template_Sentence = str(t.template)
+		template_Tuples.append((template_Sentence.replace('*',''),str(t.node.intent),extract_keyword(template_Sentence)))
+		t.is_Trained = True
+		t.save()
 
 	return template_Tuples
