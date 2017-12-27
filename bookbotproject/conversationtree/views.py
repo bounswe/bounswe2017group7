@@ -189,6 +189,103 @@ def get_average_rating(request,book):
         rate_json = "{\"average rating\""+":\""+ str(b.avg_rating)+"\"}"
         return HttpResponse(rate_json, content_type='application/json')
 
+
+#recommendation part starts
+class Table(dict):
+    
+    def __init__(self):
+        self.value_indices = {}
+    
+    def set(self, i, j, v):
+        self[(i, j)] = v
+        if i in self.value_indices:
+            self.value_indices[i].add(j)
+        else:
+            self.value_indices[i] = set([j])
+        
+    def read(self, i, j):
+        return self.get((i, j), None)
+    
+    def hasValues(self, i):
+        idx = self.value_indices.get(i, None)
+        return idx
+
+def importer(T):
+    for i in range (len(Rate.objects.all())):
+        tempRate = Rate.objects.all()[i]
+        userid = tempRate.user_id
+        booktitle = tempRate.book_title
+        rating = tempRate.value
+        T.set(userid, booktitle, rating)
+
+def averagecalc(T):
+    it = sorted(T.items())
+    sums= {}
+    counts= {}
+    for i in it:
+        user=i[0][0]
+        rating=i[1]
+        if user in sums:
+            sums[user]= sums[user]+rating
+            counts[user]= counts[user]+1
+        else:
+            sums[user]= rating
+            counts[user]=1
+
+    sumlist=sorted(sums.items())
+    averages={}
+    for user in sumlist:
+        averages[user[0]]=sums[user[0]]/counts[user[0]]
+    return averages
+
+def predict(_userid, averages, T):
+    userId = user
+    v1=T.hasValues(userId)
+    similarusers={}
+
+    for j in sorted(averages.items()):
+        simId = j[0]
+        v2 = T.hasValues(simId)
+        if userId != j[0] :
+
+            myuser=[]
+            simuser=[]
+            similarity=0
+            overlap = v1.intersection(v2)
+            for i in overlap:
+                myuser.append(T.read(userId, i) - averages[userId])
+                simuser.append(T.read(simId,i)- averages[simId])
+
+            myuserdot=numpy.array(myuser)
+            simuserdot=numpy.array(simuser)
+            dividend= numpy.dot(myuserdot.T, simuserdot)
+            divider= math.sqrt(numpy.dot(myuserdot.T, myuserdot))*math.sqrt(numpy.dot(simuserdot.T, simuserdot))
+            if divider!=0:
+                similarity= dividend/divider
+
+            if math.fabs(similarity)>0.5:
+                similarusers[simId]=similarity
+                if len(similarusers)>3:
+                    break
+    prediction = averages[userId]
+    simeff=0
+    simsum=0
+    fivestars={}
+    fourstars={}
+    for simus in similarusers.keys():
+        rates=Rate.objects.get(user_id=simus)
+        for i in range(len(Rate.objects.get(user_id=simus))):
+            if(Rate.objects.filter(user_id=simus)[i].value==5):
+                fivestars.append(Rate.objects.filter(user_id=simus)[i].book_title)
+            elif(Rate.objects.filter(user_id=simus)[i].value==4):
+                fourstars.append(Rate.objects.filter(user_id=simus)[i].book_title)
+    
+    if len(fivestars)>2:
+        return fivestars
+    elif: 
+        return fivestars.append(fourstars)
+#recommendation part ends
+
 def get_response(request, _message, _chatid):
     """ waits until a response from wit ai, it may take so much time !!!!"""
 
