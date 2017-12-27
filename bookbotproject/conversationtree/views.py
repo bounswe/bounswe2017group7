@@ -191,9 +191,6 @@ def get_average_rating(request,book):
 
 
 #recommendation part starts
-#recommendation part starts
-#recommendation part starts
-
 class Table(dict):
     
     def __init__(self):
@@ -248,8 +245,6 @@ def predict(_userid, averages, T):
 
     userId = user
     v1=T.hasValues(userId)
-    #print len(v1)
-    #print('NOW SIMILARITIES!!')
     similarusers={}
 
     for j in sorted(averages.items()):
@@ -262,7 +257,6 @@ def predict(_userid, averages, T):
             similarity=0
             overlap = v1.intersection(v2)
             for i in overlap:
-                #  print 'col {}: '.format(i), T.read(2, i), T.read(1, i)
                 myuser.append(T.read(userId, i) - averages[userId])
                 simuser.append(T.read(simId,i)- averages[simId])
 
@@ -272,12 +266,29 @@ def predict(_userid, averages, T):
             divider= math.sqrt(numpy.dot(myuserdot.T, myuserdot))*math.sqrt(numpy.dot(simuserdot.T, simuserdot))
             if divider!=0:
                 similarity= dividend/divider
-            if math.fabs(similarity)>0.5: #and float(len(overlap))/float(len(v1))>0.05:
-                #print len(overlap)
-                #print "%.3f "%similarity +' with intersection; '+ str(overlap)
+            if math.fabs(similarity)>0.5:
                 similarusers[simId]=similarity
                 if len(similarusers)>3:
                     break
+    prediction = averages[userId]
+    simeff=0
+    simsum=0
+    fivestars={}
+    fourstars={}
+
+    for simus in similarusers.keys():
+        rates=Rate.objects.get(user_id=simus)
+        for i in range(len(Rate.objects.get(user_id=simus))):
+            if(Rate.objects.filter(user_id=simus)[i].value==5):
+                fivestars.append(Rate.objects.filter(user_id=simus)[i].book_title)
+            elif(Rate.objects.filter(user_id=simus)[i].value==4):
+                fourstars.append(Rate.objects.filter(user_id=simus)[i].book_title)
+    
+    if len(fivestars)>2:
+        return fivestars
+    elif: 
+        return fivestars.append(fourstars)
+#recommendation part ends
 
 
 def get_response(request, _message, _chatid):
