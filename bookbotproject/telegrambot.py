@@ -91,14 +91,11 @@ def send_message(message, chat_id):
 		
 		send_request(sendURL);
 
-def send_photo(works, chat_id):
+def send_photo(works, chat_id, begin=0, end=2):
 	"""Sends five best books pictures alongside with information """
 	newline = "%0A"
-	count = 0
-	for work in works:
-		count +=1
-		if(count>10):
-			break
+	for work in works[begin:end]:
+
 		image_url = work['best_book']['image_url']
 		image_url = image_url.encode('utf-8')
 		title = work['best_book']['title']
@@ -132,15 +129,15 @@ def main():
 		text, chat, update_id, user_id = get_last_chat(get_updates(last_update))
 
 		#Fixer of the bug unicode special char problem
-		print("before text = "+text)
-		text = re.sub('[^A-Za-z0-9]+', ' ', text)
-		print("after text = "+text)
+		#print("before text = "+text)
+		#text = re.sub('[^A-Za-z0-9]+', ' ', text)
+		#print("after text = "+text)
 		
 
 		current_Node_r = requests.get(HOST + "getCurrentNode/{}/".format(user_id))		
 		json_response = json.loads(current_Node_r.content)
-
 		current_node_intent = json_response['intent']
+
 		#print current_node_intent
 		if(text, chat) != last_chat:
 			# Get related response for user message
@@ -169,6 +166,11 @@ def main():
 				res = get_next_message_by_genre(genre, chat)
 				send_photo(res, chat);
 				send_message(r.text,chat)
+				time.sleep(2)
+
+			elif r.text == "\"Showing more books from this author\"":
+				send_message(r.text,chat)
+				send_photo(res,chat,begin=2,end=4);
 				time.sleep(2)
 
 			elif r.text == '\"Goodbye bookworm!\"':

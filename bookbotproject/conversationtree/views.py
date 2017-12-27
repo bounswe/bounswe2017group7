@@ -300,8 +300,8 @@ def get_response(request, _message, _chatid):
         curr_user = TelegramUser.objects.get(chatid=_chatid)
         curr_node = curr_user.currentnode
 
-        print(curr_node.intent)
-        if intent_ret is None and str(curr_node.intent) != 'comment_on_book' and str(curr_node.intent) != 'book_name_comment' and str(curr_node.intent) != 'rate_book' and str(curr_node.intent) != 'book_name_rating':
+        db_intents = ['comment_on_book','book_name_comment','rate_book','book_name_rating','get_by_author','get_by_genre','get_by_title']
+        if intent_ret is None and str(curr_node.intent) not in db_intents:
             return JsonResponse('I couldn\'t understand can you express it more simple?', safe=False)
         elif intent_ret == 'end_dialog':
             curr_user.currentnode=Node.objects.all()[0]
@@ -326,7 +326,7 @@ def get_response(request, _message, _chatid):
         elif curr_node.intent == 'search_by_author':
             curr_user.currentnode=curr_node.get_children()[0]
             curr_user.save()
-            return JsonResponse(curr_user.currentnode.message, safe=False)    
+            return JsonResponse(curr_user.currentnode.message, safe=False)  
         elif curr_node.intent == 'search_by_genre':
             curr_user.currentnode=curr_node.get_children()[0]
             curr_user.save()
@@ -335,6 +335,12 @@ def get_response(request, _message, _chatid):
             curr_user.currentnode=curr_node.get_children()[0]
             curr_user.save()
             return JsonResponse(curr_user.currentnode.message, safe=False)
+
+        elif curr_node.intent == 'get_by_author':
+            curr_user.currentnode=Node.objects.all()[0]
+            curr_user.save()
+            return JsonResponse("Showing more books from this author", safe=False)
+            
         elif curr_node.intent == 'recommendation':
             curr_user.currentnode=Node.objects.all()[0]
             curr_user.save()
