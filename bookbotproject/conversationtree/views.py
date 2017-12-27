@@ -210,6 +210,33 @@ class Table(dict):
         idx = self.value_indices.get(i, None)
         return idx
 
+def importer(T):
+    for i in range (len(Rate.objects.all())):
+        tempRate = Rate.objects.all()[i]
+        userid = tempRate.user_id
+        booktitle = tempRate.book_title
+        rating = tempRate.value
+        T.set(userid, booktitle, rating)
+
+def averagecalc(T):
+    it = sorted(T.items())
+    sums= {}
+    counts= {}
+    for i in it:
+        user=i[0][0]
+        rating=i[1]
+        if user in sums:
+            sums[user]= sums[user]+rating
+            counts[user]= counts[user]+1
+        else:
+            sums[user]= rating
+            counts[user]=1
+
+    sumlist=sorted(sums.items())
+    averages={}
+    for user in sumlist:
+        averages[user[0]]=sums[user[0]]/counts[user[0]]
+    return averages
 
 
 def get_response(request, _message, _chatid):
