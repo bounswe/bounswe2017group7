@@ -14,7 +14,14 @@
 
  		a {
  			text-decoration: none;
- 			color: black;
+ 			
+ 		}
+
+ 		.header {
+ 			width: 100%;
+ 			height: 60px;
+ 			background-color: black;
+ 			clear: both;
  		}
 
  		.heading {
@@ -26,15 +33,10 @@
  			margin-left: 20px;
  		}
 
- 		.header {
- 			width: 100%;
- 			height: 60px;
- 			background-color: black;
- 		}
-
  		.login-button {
  			background-color: #ffffff;
  			font-size: 14px;
+ 			font-weight: bold;
  			float: right;
  			margin-right: 20px;
  			margin-top:15px;
@@ -43,19 +45,47 @@
  			padding-left: 10px;
  			border-radius: 2px;
  		}
+
+ 		.content {
+ 			padding: 40px 50px;
+ 		}
+
+ 		.card {
+ 			background-color: white;
+ 			text-align: left;
+ 			padding: 10px 30px;
+ 			border: 1px solid black;
+ 			width: 50%;
+ 			margin: auto;
+ 		}
+
+ 		.footer {
+ 			margin-top: 40px;
+ 		}
  	</style>
 </head>
 <body>
 	<div class="header">
 		<div class="heading">Book-o-bot</div>
 		<div class="login-button">
-			<a href="/admin/login">Admin Login</a>
+			<a href="/admin/login" style="color:black;">Admin Login</a>
 		</div>
 	</div>
-	<div>
-		<div>
-			
-		<div>
+	<div class="content">
+		<div class="card">
+			<h1>What Is Book-o-bot?</h1>
+
+			<p>This project aims to create a platform for book lovers where they interact with the platform in form of the natural language. That is, with the chatbot. This makes the interaction much more natural. People will come to this platform in order to find books, share what they know about books, and explore what other people share.</p>
+
+			<p>Like any other similar service, people will search books based on things like title, author, price, year of publication etc. However, since the platform is based on a chatbot, people will be able to specify what they are looking for through a conversation. User can start with explaining what he or she is looking for and then add new constraints in order to reduce the search space. For example, user can say “I am looking for books on Turkish cuisine” and chatbot can respond “there are 100 books on that subject. Would you like to see all?” Then, user may continue and specify, “show me the ones that cost less than 20 dollars”</p>
+
+			<p>User may desire to share what he or she knows about certain book or magazine. This can be assigning a rating or label, or writing comment about it. User may also like to make a comment on a certain page, a character in the story, or even a well-known sentence in the book. How many times did you hear the words “To Be or not to be” from the play Hamlet of Shakespeare? People can be fixated on even one sentence from a book and that makes them share with infinite passion. This platform should be able to collect such “passion points” about books from individual users and present them back to any interested person in natural conversation. For example, while user is looking for the classic sci-fi book “Dune”, chatbot can remind him or her what other people share about that book, such as how many people talked about that famous line, “Fear is the mind killer.” and then asks “Would you like to see what they left as a comment?”</p>
+		</div>
+
+		<div class="footer">
+			For more information, visit us on <a href="https://github.com/bounswe/bounswe2017group7/">GitHub</a>
+		</div>
+
 	</div>
 </body>
 </html>
