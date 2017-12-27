@@ -189,6 +189,29 @@ def get_average_rating(request,book):
         rate_json = "{\"average rating\""+":\""+ str(b.avg_rating)+"\"}"
         return HttpResponse(rate_json, content_type='application/json')
 
+
+#recommendation part starts
+class Table(dict):
+    
+    def __init__(self):
+        self.value_indices = {}
+    
+    def set(self, i, j, v):
+        self[(i, j)] = v
+        if i in self.value_indices:
+            self.value_indices[i].add(j)
+        else:
+            self.value_indices[i] = set([j])
+        
+    def read(self, i, j):
+        return self.get((i, j), None)
+    
+    def hasValues(self, i):
+        idx = self.value_indices.get(i, None)
+        return idx
+
+
+
 def get_response(request, _message, _chatid):
     """ waits until a response from wit ai, it may take so much time !!!!"""
 
