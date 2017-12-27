@@ -20,12 +20,19 @@ def search_by_author(author):
 
 	return books
 
-def search_by_genre(intent):
-	str = "genre"
-	print("genrenin basi")
-	book = gc.search_books(intent,str)
-	print("search tamamlandi")
-	return book
+def search_by_genre(genre):
+	global url
+	books=[]
+	url += genre + "&search[field]=genre"
+	response = requests.get(url)
+	converted_response = xmltodict.parse(response.content)
+	works = converted_response['GoodreadsResponse']['search']['results']['work']
+	for work in works:
+		book = work['best_book']['title']
+		books.append(book.encode('utf-8'))
+
+	return books
+
 def search_by_title(intent):
 	str = "title"
 	book = gc.search_books(intent,str)
