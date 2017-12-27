@@ -2,7 +2,7 @@ import json
 import requests
 import time
 import goodReadsApi
-
+import re
 TOKEN = "433004356:AAFzeqBEW8_UgEPDOnJ8bnQAPitaR7gLSSo";
 URL = 	"https://api.telegram.org/bot{}/".format(TOKEN);
 HOST = "http://127.0.0.1:8000/"
@@ -53,25 +53,27 @@ def get_last_chat(updates):
 
 	return [text, chat_id, update_id, user_id];
 
-def get_next_message_by_response(text, chat_id):
-	### WARNING ###
-	"""some processess we can make in this method, these methods and calls are not working."""
-	"""in node structure, maybe we can make some definition to make a search on api"""
+def get_next_message_by_genre(text, chat_id):
+	print("genre " + text)
 	
-	"""intent = witapi.getIntent(text)
-	user = findUserByChatId(chat_id)
-	for node in user.currentnode.getChildren: 
-		if (node.intent == intent):
-			return node.message"""
-	# TODO This should calculate and return next message after wit.ai is ready
-	print(text)
-	"""if intent is determined by the wit.ai we can search by author"""
 	book = goodReadsApi.search_by_genre(text)
 	
+	return book
 
-	## BUG DETECTED
-	#sometimes these searches returns multiple dimensional arrays. when it happens no message returns to the user. for exmple: make a search_by_author("dan brown")
-	# we need to handle this bug
+
+def get_next_message_by_author(text, chat_id):
+	print("author " +text)
+	
+	book = goodReadsApi.search_by_author(text)
+	
+	return book
+
+
+def get_next_message_by_title(text, chat_id):
+	print("title "+text)
+	
+	book = goodReadsApi.search_by_title(text)
+	
 	return book
 
 def send_message(message, chat_id):
@@ -83,10 +85,42 @@ def send_message(message, chat_id):
 			send_request(sendURL);
 			time.sleep(0.3);
 	else:
+		print(chat_id)
 		sendURL = URL + "sendMessage?text={}&chat_id={}".format(message, chat_id);
 		sendURL = sendURL.replace("#","No:")
+		
 		send_request(sendURL);
 
+def send_photo(works, chat_id):
+	"""Sends five best books pictures alongside with information """
+	newline = "%0A"
+	count = 0
+	for work in works:
+		count +=1
+		if(count>10):
+			break
+		image_url = work['best_book']['image_url']
+		image_url = image_url.encode('utf-8')
+		title = work['best_book']['title']
+		title = title.encode('utf-8')
+		title = title.replace("&","and")
+
+		author = work['best_book']['author']['name']
+		author = author.encode('utf-8')
+		author = author.replace("&","and")
+
+		try:
+			pub_year = work['original_publication_year']['#text']
+		except KeyError as e:
+			pub_year = "Not Found"
+		pub_year = pub_year.encode('utf-8')
+		### belki burda utf 8 special char arindirmasi yapabiliriz
+		sendURL = URL + "sendPhoto?photo={}&chat_id={}".format(image_url, chat_id)
+		sendURL = sendURL + "&caption=" +"Title : " +title +newline+"Author : " +author + newline+"Publication Year : " + pub_year
+		sendURL = sendURL.replace("#","No:")
+		
+		send_request(sendURL);
+		time.sleep(0.3);
 
 def main():
 	counter = 0
@@ -96,6 +130,12 @@ def main():
 	while True:
 
 		text, chat, update_id, user_id = get_last_chat(get_updates(last_update))
+
+		#Fixer of the bug unicode special char problem
+		print("before text = "+text)
+		text = re.sub('[^A-Za-z0-9]+', ' ', text)
+		print("after text = "+text)
+		
 
 		current_Node_r = requests.get(HOST + "getCurrentNode/{}/".format(user_id))		
 		json_response = json.loads(current_Node_r.content)
@@ -112,8 +152,33 @@ def main():
 				end_switch = True
 			elif r.text == "\"Which genre's books are you looking for?\"" :
 				end_switch = False
-				res = get_next_message_by_response(text, chat)
-				send_message(res, chat);
+				temptext = text
+				send_message(r.text,chat)
+				while (temptext==text):
+					text, chat, update_id, user_id = get_last_chat(get_updates(last_update))
+					time.sleep(0.5)
+				res = get_next_message_by_genre(text, chat)
+				send_photo(res, chat);
+				counter = 0
+			elif r.text == "\"Which author's books are you looking for?\"" :
+				end_switch = False
+				temptext = text
+				send_message(r.text,chat)
+				while (temptext==text):
+					text, chat, update_id, user_id = get_last_chat(get_updates(last_update))
+					time.sleep(0.5)
+				res = get_next_message_by_author(text, chat)
+				send_photo(res, chat);
+				counter = 0
+			elif r.text == "\"Which subject are you looking for?\"" :
+				end_switch = False
+				temptext = text
+				send_message(r.text,chat)
+				while (temptext==text):
+					text, chat, update_id, user_id = get_last_chat(get_updates(last_update))
+					time.sleep(0.5)
+				res = get_next_message_by_title(text, chat)
+				send_photo(res, chat);
 				counter = 0
 			elif r.text == '\"Goodbye bookworm!\"':
 				send_message(r.text, chat);
