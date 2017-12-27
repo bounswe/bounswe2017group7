@@ -33,9 +33,16 @@ def search_by_genre(genre):
 
 	return books
 
-def search_by_title(intent):
-	str = "title"
-	book = gc.search_books(intent,str)
-	return book
+def search_by_name(title):
+	global url
+	books=[]
+	url += title + "&search[field]=title"
+	response = requests.get(url)
+	converted_response = xmltodict.parse(response.content)
+	works = converted_response['GoodreadsResponse']['search']['results']['work']
+	for work in works:
+		book = work['best_book']['title']
+		books.append(book.encode('utf-8'))
 
+	return books
 
