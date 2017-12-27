@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.core.exceptions import MultipleObjectsReturned
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from conversationtree.models import Node
@@ -157,9 +158,12 @@ def get_comments(request,book):
         return HttpResponse(status=404)
 
     try:
-        comments = Comment.objects.filter(book=b).filter(isFlagged=False)
+        comments = Comment.objects.get(book=b)
     except Comment.DoesNotExist:
         return HttpResponse(status=404)
+    except MultipleObjectsReturned:
+        comments = Comment.objects.filter(book=b).filter(isFlagged=False)
+
 
     if request.method == 'GET':
         comment_json="{\"comments\""+":["
@@ -172,7 +176,7 @@ def get_comments(request,book):
 @csrf_exempt
 def get_average_rating(request,book):
     """
-    Returns comments of a given book 
+    Returns average rating of a given book 
     """ 
 
     try:
@@ -180,21 +184,10 @@ def get_average_rating(request,book):
     except Book.DoesNotExist:
         return HttpResponse(status=404)
 
-    try:
-        rates = Rate.objects.filter(book=b)
-    except Rate.DoesNotExist:
-        return HttpResponse(status=404)
-
 
     if request.method == 'GET':
-        avg_rating=0.0
-        for r in rates:
-            avg_rating += r.value
-
-        avg_rating = avg_rating/len(rates)
-        rate_json = "{\"average rating\""+":\""+ str(avg_rating)+"\"}"
+        rate_json = "{\"average rating\""+":\""+ str(b.avg_rating)+"\"}"
         return HttpResponse(rate_json, content_type='application/json')
-
 
 
 #recommendation part starts
@@ -251,73 +244,6 @@ def averagecalc(T):
         averages[user[0]]=sums[user[0]]/counts[user[0]]
     return averages
 
-def predict(_userid, averages, T):
-
-    
-
-    userId = user
-    
-
-    v1=T.hasValues(userId)
-    #print len(v1)
-    #print('NOW SIMILARITIES!!')
-    similarusers={}
-
-
-
-    for j in sorted(averages.items()):
-        simId = j[0]
-        v2 = T.hasValues(simId)
-        if userId != j[0] :
-
-            myuser=[]
-            simuser=[]
-            similarity=0
-            overlap = v1.intersection(v2)
-            for i in overlap:
-                #  print 'col {}: '.format(i), T.read(2, i), T.read(1, i)
-                myuser.append(T.read(userId, i) - averages[userId])
-                simuser.append(T.read(simId,i)- averages[simId])
-
-            myuserdot=numpy.array(myuser)
-            simuserdot=numpy.array(simuser)
-            dividend= numpy.dot(myuserdot.T, simuserdot)
-            divider= math.sqrt(numpy.dot(myuserdot.T, myuserdot))*math.sqrt(numpy.dot(simuserdot.T, simuserdot))
-            if divider!=0:
-                similarity= dividend/divider
-
-            if math.fabs(similarity)>0.5: #and float(len(overlap))/float(len(v1))>0.05:
-                #print len(overlap)
-                #print "%.3f "%similarity +' with intersection; '+ str(overlap)
-                similarusers[simId]=similarity
-                if len(similarusers)>3:
-                    break
-
-    prediction = averages[userId]
-    simeff=0
-    simsum=0
-    fivestars={}
-    fourstars={}
-
-    #print similarusers.keys()
-    for simus in similarusers.keys():
-        rates=Rate.objects.get(user_id=simus)
-        for i in range(len(Rate.objects.get(user_id=simus))):
-            if(Rate.objects.filter(user_id=simus)[i].value==5):
-                fivestars.append(Rate.objects.filter(user_id=simus)[i].book_title)
-            elif(Rate.objects.filter(user_id=simus)[i].value==4):
-                fourstars.append(Rate.objects.filter(user_id=simus)[i].book_title)
-    
-    if len(fivestars)>2:
-        return fivestars
-    elif: 
-        return fivestars.append(fourstars)
-
-
-#recommendation part ends
-#recommendation part ends
-#recommendation part ends
-#recommendation part ends
 
 def get_response(request, _message, _chatid):
     """ waits until a response from wit ai, it may take so much time !!!!"""
