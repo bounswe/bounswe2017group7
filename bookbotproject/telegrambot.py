@@ -82,13 +82,13 @@ def send_message(message, chat_id):
 		for index in message:
 			sendURL = URL + "sendMessage?text={}&chat_id={}".format(index, chat_id);
 			sendURL = sendURL.replace("#","No:")
-			sendURL = sendURL.replace("&","and")
 			send_request(sendURL);
 			time.sleep(0.3);
 	else:
+		print(chat_id)
 		sendURL = URL + "sendMessage?text={}&chat_id={}".format(message, chat_id);
 		sendURL = sendURL.replace("#","No:")
-		sendURL = sendURL.replace("&","and")
+		
 		send_request(sendURL);
 
 def send_photo(works, chat_id):
@@ -103,8 +103,12 @@ def send_photo(works, chat_id):
 		image_url = image_url.encode('utf-8')
 		title = work['best_book']['title']
 		title = title.encode('utf-8')
+		title = title.replace("&","and")
+
 		author = work['best_book']['author']['name']
 		author = author.encode('utf-8')
+		author = author.replace("&","and")
+
 		try:
 			pub_year = work['original_publication_year']['#text']
 		except KeyError as e:
@@ -114,7 +118,6 @@ def send_photo(works, chat_id):
 		sendURL = URL + "sendPhoto?photo={}&chat_id={}".format(image_url, chat_id)
 		sendURL = sendURL + "&caption=" +"Title : " +title +newline+"Author : " +author + newline+"Publication Year : " + pub_year
 		sendURL = sendURL.replace("#","No:")
-		sendURL = sendURL.replace("&","and")
 		
 		send_request(sendURL);
 		time.sleep(0.3);
@@ -149,13 +152,17 @@ def main():
 				end_switch = True
 			elif r.text == "\"Which genre's books are you looking for?\"" :
 				end_switch = False
+				temptext = text
 				send_message(r.text,chat)
+				while (temptext==text):
+					text, chat, update_id, user_id = get_last_chat(get_updates(last_update))
+					time.sleep(0.5)
 				res = get_next_message_by_genre(text, chat)
 				send_photo(res, chat);
 				counter = 0
 			elif r.text == "\"Which author's books are you looking for?\"" :
-				temptext = text
 				end_switch = False
+				temptext = text
 				send_message(r.text,chat)
 				while (temptext==text):
 					text, chat, update_id, user_id = get_last_chat(get_updates(last_update))
@@ -163,9 +170,13 @@ def main():
 				res = get_next_message_by_author(text, chat)
 				send_photo(res, chat);
 				counter = 0
-			elif r.text == "\"Which title's books are you looking for?\"" :
+			elif r.text == "\"Which subject are you looking for?\"" :
 				end_switch = False
+				temptext = text
 				send_message(r.text,chat)
+				while (temptext==text):
+					text, chat, update_id, user_id = get_last_chat(get_updates(last_update))
+					time.sleep(0.5)
 				res = get_next_message_by_title(text, chat)
 				send_photo(res, chat);
 				counter = 0
