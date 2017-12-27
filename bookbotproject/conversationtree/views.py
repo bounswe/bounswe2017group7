@@ -282,7 +282,7 @@ def predict(_userid, averages, T):
     
     if len(fivestars)>2:
         return fivestars
-    elif: 
+    else: 
         return fivestars.append(fourstars)
 #recommendation part ends
 
