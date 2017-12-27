@@ -1,27 +1,28 @@
-from goodreads import client
+import requests
+import xmltodict
+import json
+
 
 goodreads_key = "UfEAj6yQFcghrsqrZpQ"
 goodreads_secret = "AgAug5etGSAYceT2SeLGBZLMm803I6LiQSxSnGubOjg"
-gc = client.GoodreadsClient	(goodreads_key,goodreads_secret)
+url = "https://www.goodreads.com/search.xml?key=" + goodreads_key + "&q="
 
 
-"""TODO : add bunch of methods like ,search(response): takes response as parameter coming from wit.ai intent and searches .... """
+def search_by_author(author):
+	global url
+	books=[]
+	url += author + "&search[field]=author"
+	response = requests.get(url)
+	converted_response = xmltodict.parse(response.content)
+	works = converted_response['GoodreadsResponse']['search']['results']['work']
+	for work in works:
+		book = work['best_book']['title']
+		books.append(book.encode('utf-8'))
 
-#Prints 20 of different title of book related to keyword
+	return books
 
-def search_by_author(intent):
-	str = "author"
-	book = gc.search_books(intent,str)
-	return search_books
-def search_by_genre(intent):
-	str = "genre"
-	print("genrenin basi")
-	book = gc.search_books(intent,str)
-	print("search tamamlandi")
-	return book
-def search_by_title(intent):
-	str = "title"
-	book = gc.search_books(intent,str)
-	return book
+def search_by_genre(genre):
+	pass
 
-
+def search_by_name(title):
+	pass
