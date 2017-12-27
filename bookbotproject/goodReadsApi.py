@@ -7,7 +7,6 @@ goodreads_key = "UfEAj6yQFcghrsqrZpQ"
 goodreads_secret = "AgAug5etGSAYceT2SeLGBZLMm803I6LiQSxSnGubOjg"
 url = "https://www.goodreads.com/search.xml?key=" + goodreads_key + "&q="
 
-
 def search_by_author(author):
 	global url
 	books=[]
@@ -21,8 +20,15 @@ def search_by_author(author):
 
 	return books
 
-def search_by_genre(genre):
-	pass
+def search_by_genre(intent):
+	str = "genre"
+	print("genrenin basi")
+	book = gc.search_books(intent,str)
+	print("search tamamlandi")
+	return book
+def search_by_title(intent):
+	str = "title"
+	book = gc.search_books(intent,str)
+	return book
 
-def search_by_name(title):
-	pass
+

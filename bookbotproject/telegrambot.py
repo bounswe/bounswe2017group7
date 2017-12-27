@@ -103,8 +103,11 @@ def main():
 		current_node_intent = json_response['intent']
 		#print current_node_intent
 		if(text, chat) != last_chat:
-
+			# Get related response for user message
 			r = requests.get(HOST + "getResponse/{}/{}/".format(text, chat))
+
+			print(r.text)
+
 			if end_switch and r.text == '\"Goodbye bookworm!\"':
 				end_switch = True
 			elif r.text == "\"Which genre's books are you looking for?\"" :
@@ -116,20 +119,21 @@ def main():
 				send_message(r.text, chat);
 				counter = 0
 				end_switch = True
-			elif current_node_intent == 'comment_on_book':
-				comment = text
-				send_message(r.text, chat);
-			elif current_node_intent == 'rate_book':
-				rating = text
-				send_message(r.text, chat);
-			elif r.text == '\"Your comment is saved!\"':
+			elif r.text == '\"What is your comment on this book?\"':
 				book = text
+				send_message(r.text, chat);
+			elif r.text == '\"What is your rating from 1 to 5?\"':
+				book = text
+				send_message(r.text, chat);	
+			elif r.text == '\"Your comment is saved!\"':
+				comment = text
 				url =  HOST + "addComment/{}/{}/{}/".format(book, user_id, comment)
 				send_message(r.text, chat);
 				r = requests.post(url)
 			elif r.text == '\"Your rating is saved!\"':
-				book = text
+				rating = text
 				url =  HOST + "addRating/{}/{}/{}/".format(book, user_id, rating)
+				print(url)
 				send_message(r.text, chat);
 				r = requests.post(url)
 			else:
@@ -143,5 +147,3 @@ def main():
 
 if __name__ == '__main__':
 	main();
-
-
