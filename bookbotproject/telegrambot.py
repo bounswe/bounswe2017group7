@@ -169,9 +169,16 @@ def main():
 				time.sleep(2)
 
 			elif r.text == "\"Showing more books from this author\"":
-				send_message(r.text,chat)
-				send_photo(res,chat,begin=2,end=4);
-				time.sleep(2)
+				if text=="Yes":
+					send_message(r.text,chat)
+					send_photo(res,chat,begin=2,end=4);
+					time.sleep(2)
+
+			elif r.text == "\"Showing more books from this genre\"":
+				if text=="Yes":
+					send_message(r.text,chat)
+					send_photo(res,chat,begin=2,end=4);
+					time.sleep(2)
 
 			elif r.text == '\"Goodbye bookworm!\"':
 				send_message(r.text, chat);
