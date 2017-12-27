@@ -72,7 +72,7 @@ def get_next_message_by_author(text, chat_id):
 def get_next_message_by_title(text, chat_id):
 	print("title "+text)
 	
-	book = goodReadsApi.search_by_title(text)
+	book = goodReadsApi.search_by_name(text)
 	
 	return book
 
