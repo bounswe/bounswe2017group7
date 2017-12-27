@@ -323,6 +323,18 @@ def get_response(request, _message, _chatid):
             curr_user.currentnode=Node.objects.all()[0]
             curr_user.save()
             return JsonResponse('Your rating is saved!', safe=False)    
+        elif curr_node.intent == 'search_by_author':
+            curr_user.currentnode=curr_node.get_children()[0]
+            curr_user.save()
+            return JsonResponse(curr_user.currentnode.message, safe=False)    
+        elif curr_node.intent == 'search_by_genre':
+            curr_user.currentnode=curr_node.get_children()[0]
+            curr_user.save()
+            return JsonResponse(curr_user.currentnode.message, safe=False)
+        elif curr_node.intent == 'search_by_title':
+            curr_user.currentnode=curr_node.get_children()[0]
+            curr_user.save()
+            return JsonResponse(curr_user.currentnode.message, safe=False)
         elif curr_node.intent == 'recommendation':
             curr_user.currentnode=Node.objects.all()[0]
             curr_user.save()

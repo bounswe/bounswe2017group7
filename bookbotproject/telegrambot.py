@@ -72,7 +72,7 @@ def get_next_message_by_author(text, chat_id):
 def get_next_message_by_title(text, chat_id):
 	print("title "+text)
 	
-	book = goodReadsApi.search_by_title(text)
+	book = goodReadsApi.search_by_name(text)
 	
 	return book
 
@@ -150,36 +150,27 @@ def main():
 
 			if end_switch and r.text == '\"Goodbye bookworm!\"':
 				end_switch = True
-			elif r.text == "\"Which genre's books are you looking for?\"" :
-				end_switch = False
-				temptext = text
-				send_message(r.text,chat)
-				while (temptext==text):
-					text, chat, update_id, user_id = get_last_chat(get_updates(last_update))
-					time.sleep(0.5)
-				res = get_next_message_by_genre(text, chat)
+			elif r.text == "\"Do you want more books from this title?\"":
+				title= text
+				res = get_next_message_by_title(title, chat)
 				send_photo(res, chat);
-				counter = 0
-			elif r.text == "\"Which author's books are you looking for?\"" :
-				end_switch = False
-				temptext = text
+				time.sleep(2)
 				send_message(r.text,chat)
-				while (temptext==text):
-					text, chat, update_id, user_id = get_last_chat(get_updates(last_update))
-					time.sleep(0.5)
-				res = get_next_message_by_author(text, chat)
+				
+			elif r.text == "\"Do you want more books from this author?\"":
+				author = text
+				res = get_next_message_by_author(author, chat)
 				send_photo(res, chat);
-				counter = 0
-			elif r.text == "\"Which subject are you looking for?\"" :
-				end_switch = False
-				temptext = text
+				time.sleep(2)
 				send_message(r.text,chat)
-				while (temptext==text):
-					text, chat, update_id, user_id = get_last_chat(get_updates(last_update))
-					time.sleep(0.5)
-				res = get_next_message_by_title(text, chat)
+				
+			elif r.text == "\"Do you want more books from this genre?\"":	
+				genre = text
+				res = get_next_message_by_genre(genre, chat)
 				send_photo(res, chat);
-				counter = 0
+				send_message(r.text,chat)
+				time.sleep(2)
+
 			elif r.text == '\"Goodbye bookworm!\"':
 				send_message(r.text, chat);
 				counter = 0
