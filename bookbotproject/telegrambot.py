@@ -124,12 +124,12 @@ def main():
 				send_message(r.text, chat);
 			elif r.text == '\"Your comment is saved!\"':
 				book = text
-				url =  HOST + "addComment/{}/{}/{}/".format(book.replace(' ', '_'), user_id, comment)
+				url =  HOST + "addComment/{}/{}/{}/".format(book, user_id, comment)
 				send_message(r.text, chat);
 				r = requests.post(url)
 			elif r.text == '\"Your rating is saved!\"':
 				book = text
-				url =  HOST + "addRating/{}/{}/{}/".format(book.replace(' ', '_'), user_id, rating)
+				url =  HOST + "addRating/{}/{}/{}/".format(book, user_id, rating)
 				send_message(r.text, chat);
 				r = requests.post(url)
 			else:
