@@ -8,15 +8,11 @@ goodreads_secret = "AgAug5etGSAYceT2SeLGBZLMm803I6LiQSxSnGubOjg"
 url = "https://www.goodreads.com/search.xml?key=" + goodreads_key + "&q="
 
 def search_helper(url):
-	books=[]
 	response = requests.get(url)
 	converted_response = xmltodict.parse(response.content)
+	print("Query time : "+ converted_response['GoodreadsResponse']['search']['query-time-seconds'])
 	works = converted_response['GoodreadsResponse']['search']['results']['work']
-	for work in works:
-		book = work['best_book']['title']
-		books.append(book.encode('utf-8'))
-
-	return books
+	return works
 
 def search_by_author(author):
 	global url
