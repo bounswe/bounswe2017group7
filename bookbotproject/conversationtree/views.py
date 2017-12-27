@@ -346,6 +346,11 @@ def get_response(request, _message, _chatid):
             curr_user.save()
             return JsonResponse("Showing more books from this genre", safe=False)
 
+        elif curr_node.intent == 'get_by_title':
+            curr_user.currentnode=Node.objects.all()[0]
+            curr_user.save()
+            return JsonResponse("Showing more books from this title", safe=False)
+
         elif curr_node.intent == 'recommendation':
             curr_user.currentnode=Node.objects.all()[0]
             curr_user.save()

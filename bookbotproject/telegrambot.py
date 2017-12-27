@@ -91,7 +91,7 @@ def send_message(message, chat_id):
 		
 		send_request(sendURL);
 
-def send_photo(works, chat_id, begin=0, end=2):
+def send_photo(works, chat_id, begin=0, end=3):
 	"""Sends five best books pictures alongside with information """
 	newline = "%0A"
 	for work in works[begin:end]:
@@ -148,7 +148,7 @@ def main():
 			if end_switch and r.text == '\"Goodbye bookworm!\"':
 				end_switch = True
 			elif r.text == "\"Do you want more books from this title?\"":
-				title= text
+				title=text
 				res = get_next_message_by_title(title, chat)
 				send_photo(res, chat);
 				time.sleep(2)
@@ -171,13 +171,19 @@ def main():
 			elif r.text == "\"Showing more books from this author\"":
 				if text=="Yes":
 					send_message(r.text,chat)
-					send_photo(res,chat,begin=2,end=4);
+					send_photo(res,chat,begin=3,end=8);
 					time.sleep(2)
 
 			elif r.text == "\"Showing more books from this genre\"":
 				if text=="Yes":
 					send_message(r.text,chat)
-					send_photo(res,chat,begin=2,end=4);
+					send_photo(res,chat,begin=3,end=8);
+					time.sleep(2)
+
+			elif r.text == "\"Showing more books from this title\"":
+				if text=="Yes":
+					send_message(r.text,chat)
+					send_photo(res,chat,begin=3,end=8);
 					time.sleep(2)
 
 			elif r.text == '\"Goodbye bookworm!\"':
