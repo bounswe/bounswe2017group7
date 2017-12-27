@@ -166,5 +166,3 @@ for i in range(1,6):
     tf= open(testf,'r')
     createpfile(tf,ptf,T)
     tf.close()
-
-
