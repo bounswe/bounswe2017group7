@@ -263,7 +263,14 @@ def main():
 				send_message(r.text, chat);
 				r = requests.post(url)
 			else:
-				send_message(r.text, chat);
+				if current_node_intent=="recommendation":
+					rec_books = r.text.split(',')
+					for book in rec_books:
+						book = book.strip()
+						rec = get_next_message_by_title(book, chat)
+						send_photo(rec, chat, 0, 1)
+				else:
+					send_message(r.text, chat);
 				counter = counter+1
 			last_chat = (text, chat);			
 			last_update = update_id; 
