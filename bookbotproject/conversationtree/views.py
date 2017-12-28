@@ -371,9 +371,15 @@ def get_response(request, _message, _chatid):
             return JsonResponse("Showing more books from this title", safe=False)
 
         elif curr_node.intent == 'recommendation':
+            T = Table()
+            importer(T)
+            averages=averagecalc(T)
+            booklist = predict(curr_user.userid, averages, T)
+            print(type(booklist))
+            booklist = [book.encode('utf-8') for book in booklist]
             curr_user.currentnode=Node.objects.all()[0]
             curr_user.save()
-            return JsonResponse(get_recommendation, safe=False)
+            return JsonResponse(booklist, safe=False)
         else:   
             for i in range(len(curr_node.get_children())):
                 if intent_ret == curr_node.get_children()[i].intent:
