@@ -319,7 +319,8 @@ def get_response(request, _message, _chatid):
         curr_user = TelegramUser.objects.get(chatid=_chatid)
         curr_node = curr_user.currentnode
 
-        db_intents = ['comment_on_book','book_name_comment','rate_book','book_name_rating','get_by_author','get_by_genre','get_by_title','get_comments','get_average_rating']
+        db_intents = ['comment_on_book','book_name_comment','rate_book','book_name_rating','get_by_author','get_by_genre','get_by_title','get_comments','get_average_rating'
+                        ,'search_by_author','search_by_title','search_by_title']
         if intent_ret is None and str(curr_node.intent) not in db_intents:
             return JsonResponse('I couldn\'t understand can you express it more simple?', safe=False)
         elif intent_ret == 'end_dialog':
