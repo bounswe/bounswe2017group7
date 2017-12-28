@@ -168,6 +168,7 @@ def get_comments(request,book):
 
 
     if request.method == 'GET':
+        print(comments)
         comment_json="{\"comments\""+":["
         for c in comments:
             comment_json += "{\"comment\":\"" + str(c.comment) + "\"},"
