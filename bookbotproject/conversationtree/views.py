@@ -157,14 +157,12 @@ def get_comments(request,book):
     try:
         b = Book.objects.get(title=book)
     except Book.DoesNotExist:
-        comment_json="{\"comments\""+":\"None\"}"
-        return HttpResponse(comment_json, content_type='application/json')
+        return HttpResponse(status=404)
 
     try:
         comments = Comment.objects.get(book=b)
     except Comment.DoesNotExist:
-        comment_json="{\"comments\""+":\"None\"}"
-        return HttpResponse(comment_json, content_type='application/json')
+        return HttpResponse(status=404)
     except MultipleObjectsReturned:
         comments = Comment.objects.filter(book=b).filter(isFlagged=False)
 
@@ -172,7 +170,7 @@ def get_comments(request,book):
     if request.method == 'GET':
         comment_json="{\"comments\""+":["
         for c in comments:
-            comment_json += "{\"comment\":\"" + str(c.comment) + "\"},"
+            comment_json += "{\"comment\":" + str(c.comment) + "},"
 
         comment_json = comment_json[:-1] + "]}"
         return HttpResponse(comment_json, content_type='application/json')
@@ -186,12 +184,11 @@ def get_average_rating(request,book):
     try:
         b = Book.objects.get(title=book)
     except Book.DoesNotExist:
-        rate_json = "{\"rating\""+":\"None\"}"
-        return HttpResponse(rate_json, content_type='application/json')
+        return HttpResponse(status=404)
 
 
     if request.method == 'GET':
-        rate_json = "{\"rating\""+":\""+ str(b.avg_rating)+"\"}"
+        rate_json = "{\"average rating\""+":\""+ str(b.avg_rating)+"\"}"
         return HttpResponse(rate_json, content_type='application/json')
 
 
@@ -277,14 +274,28 @@ def predict(_userid, averages, T):
     simsum=0
     fivestars=[]
     fourstars=[]
+
+    myuserbooks = []
+    myuser =Rate.objects.filter(user_id=_userid)
+    for i in range (len(myuser)):
+        myuserbooks.append(myuser[i].book_title)
+
     for simus in similarusers.keys():
+
         rates=Rate.objects.filter(user_id=simus)
+
+
+
+        #print rates[0].user_id
         for i in range(len(rates)):
-            if(rates[i].value==5):
+            #print rates[i].book_title
+            if(rates[i].value==5 and rates[i].book_title not in myuserbooks):
                 fivestars.append(rates[i].book_title)
-            elif(rates[i].value==4):
+            elif(rates[i].value==4 and rates[i].book_title not in myuserbooks):
                 fourstars.append(rates[i].book_title)
     
+    print fivestars
+    print fourstars
     if len(fivestars)>2:
         return fivestars
     else: 
@@ -304,9 +315,9 @@ def get_response(request, _message, _chatid):
 
         curr_user = TelegramUser.objects.get(chatid=_chatid)
         curr_node = curr_user.currentnode
-
-        db_intents = ['comment_on_book','book_name_comment','rate_book','book_name_rating','get_by_author','get_by_genre','get_by_title','get_comments','get_average_rating']
-        if intent_ret is None and str(curr_node.intent) not in db_intents:
+        
+        print(curr_node.intent)
+        if intent_ret is None and str(curr_node.intent) != 'comment_on_book' and str(curr_node.intent) != 'book_name_comment' and str(curr_node.intent) != 'rate_book' and str(curr_node.intent) != 'book_name_rating':
             return JsonResponse('I couldn\'t understand can you express it more simple?', safe=False)
         elif intent_ret == 'end_dialog':
             curr_user.currentnode=Node.objects.all()[0]
@@ -314,22 +325,6 @@ def get_response(request, _message, _chatid):
             return JsonResponse('Goodbye bookworm!', safe=False)
         elif curr_node.intent == 'comment_on_book':
             curr_user.currentnode=curr_node.get_children()[0]
-            curr_user.save()
-            return JsonResponse(curr_user.currentnode.message, safe=False)
-        elif curr_node.intent == 'get_comments':
-            curr_user.currentnode=curr_node.get_children()[0]
-            curr_user.save()
-            return JsonResponse(curr_user.currentnode.message, safe=False)
-        elif curr_node.intent == 'get_average_rating':
-            curr_user.currentnode=curr_node.get_children()[0]
-            curr_user.save()
-            return JsonResponse(curr_user.currentnode.message, safe=False)
-        elif curr_node.intent == 'avg':
-            curr_user.currentnode=Node.objects.all()[0]
-            curr_user.save()
-            return JsonResponse(curr_user.currentnode.message, safe=False)
-        elif curr_node.intent == 'comment':
-            curr_user.currentnode=Node.objects.all()[0]
             curr_user.save()
             return JsonResponse(curr_user.currentnode.message, safe=False)
         elif curr_node.intent == 'book_name_comment':
@@ -347,7 +342,7 @@ def get_response(request, _message, _chatid):
         elif curr_node.intent == 'search_by_author':
             curr_user.currentnode=curr_node.get_children()[0]
             curr_user.save()
-            return JsonResponse(curr_user.currentnode.message, safe=False)  
+            return JsonResponse(curr_user.currentnode.message, safe=False)    
         elif curr_node.intent == 'search_by_genre':
             curr_user.currentnode=curr_node.get_children()[0]
             curr_user.save()
@@ -356,32 +351,21 @@ def get_response(request, _message, _chatid):
             curr_user.currentnode=curr_node.get_children()[0]
             curr_user.save()
             return JsonResponse(curr_user.currentnode.message, safe=False)
-
-        elif curr_node.intent == 'get_by_author':
-            curr_user.currentnode=Node.objects.all()[0]
-            curr_user.save()
-            return JsonResponse("Showing more books from this author", safe=False)
-
-        elif curr_node.intent == 'get_by_genre':
-            curr_user.currentnode=Node.objects.all()[0]
-            curr_user.save()
-            return JsonResponse("Showing more books from this genre", safe=False)
-
-        elif curr_node.intent == 'get_by_title':
-            curr_user.currentnode=Node.objects.all()[0]
-            curr_user.save()
-            return JsonResponse("Showing more books from this title", safe=False)
-
         elif curr_node.intent == 'recommendation':
+            print('recommendation giris')
             T = Table()
             importer(T)
             averages=averagecalc(T)
             booklist = predict(curr_user.userid, averages, T)
             print(type(booklist))
             booklist = [book.encode('utf-8') for book in booklist]
+            s = ""
+            for book in booklist:
+                s += book + "\n"
             curr_user.currentnode=Node.objects.all()[0]
+            print s[:-1]
             curr_user.save()
-            return JsonResponse(booklist, safe=False)
+            return JsonResponse(s[:-1], safe=False)
         else:   
             for i in range(len(curr_node.get_children())):
                 if intent_ret == curr_node.get_children()[i].intent:
