@@ -361,11 +361,11 @@ def get_response(request, _message, _chatid):
             booklist = [book.encode('utf-8') for book in booklist]
             s = ""
             for book in booklist:
-                s += book + "\n"
+                s += book + ", "
             curr_user.currentnode=Node.objects.all()[0]
-            print s[:-1]
+            
             curr_user.save()
-            return JsonResponse(s[:-1], safe=False)
+            return JsonResponse(s[:-2], safe=False)
         else:   
             for i in range(len(curr_node.get_children())):
                 if intent_ret == curr_node.get_children()[i].intent:
