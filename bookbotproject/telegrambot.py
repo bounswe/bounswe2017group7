@@ -222,12 +222,18 @@ def main():
 					send_photo(res,chat,begin=3,end=8);
 					time.sleep(2)
 			elif r.text == "\"100\"":
-				print("HHHHEEERRREEE")
 				book = text;
-				send_message(r.text,chat)
 				url =  HOST + "getAverageRating/{}/".format(book)
 				_json = get_json(url)
-				print(_json['rating'])
+				if _json['rating'] == "None":
+					send_message("Sorry, I don't have any rating of this book", chat)
+				else:
+					send_message(_json['rating'], chat)
+			elif r.text == "\"200\"":
+				book = text;
+				url =  HOST + "getComments/{}/".format(book)
+				_json = get_json(url)
+				send_message(r.text,chat)
 			elif r.text == '\"Goodbye bookworm!\"':
 				send_message(r.text, chat);
 				counter = 0
