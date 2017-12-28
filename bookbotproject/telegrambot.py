@@ -171,8 +171,8 @@ def main():
 				keyboard = '{"inline_keyboard" : [[{"text":"Get information","callback_data":"I want to get information"}],[{"text":"Give information","callback_data":"give info"}],[{"text":"Recomend me some books","callback_data":"recommend"}]]}'
 				send_message(r.text,chat,keyboard)
 
-			elif r.text == "\"Do you want to search a book  by author, genre or subject?\"":
-				keyboard = '{"inline_keyboard" : [[{"text":"Search by subject","callback_data":"search by subject"}],[{"text":"Search by author","callback_data":"search by author"}],[{"text":"Search by genre","callback_data":"search by genre"}]]}'
+			elif r.text == "\"Do you want to search books? You can also get comments or ratings by saying get comments or get ratings!\"":
+				keyboard = '{"inline_keyboard" : [[{"text":"Search by title","callback_data":"search by title"}],[{"text":"Search by author","callback_data":"search by author"}],[{"text":"Search by genre","callback_data":"search by genre"}]]}'
 				send_message(r.text,chat,keyboard)
 			
 			
