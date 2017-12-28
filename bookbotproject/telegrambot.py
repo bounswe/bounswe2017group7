@@ -168,7 +168,7 @@ def main():
 			if end_switch and r.text == '\"Goodbye bookworm!\"':
 				end_switch = True
 			elif r.text == "\"Get or give information? I can also recommend some books!\"":
-				keyboard = '{"inline_keyboard" : [[{"text":"Get information","callback_data":"I want to get information"}],[{"text":"Give information","callback_data":"give info"}],[{"text":"Recomend me some books","callback_data":"recommend"}]]}'
+				keyboard = '{"inline_keyboard" : [[{"text":"Get information","callback_data":"I want to get information"}],[{"text":"Give information","callback_data":"give info"}],[{"text":"Recommend me some books","callback_data":"recommend"}]]}'
 				send_message(r.text,chat,keyboard)
 
 			elif r.text == "\"Do you want to search books? You can also get comments or ratings by saying get comments or get ratings!\"":
