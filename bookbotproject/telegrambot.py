@@ -159,7 +159,7 @@ def main():
 		current_node_intent = json_response['intent']
 
 		#print current_node_intent
-		if(text, chat) != last_chat:
+		if(text, chat) != last_chat or current_node_intent=="recommendation":
 			# Get related response for user message
 			r = requests.get(HOST + "getResponse/{}/{}/".format(text, chat))
 
