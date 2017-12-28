@@ -45,7 +45,6 @@ def check_user(name, user_id, chat_id):
 def get_last_chat(updates):
 	length = len(updates["result"]);
 	#print("Get last chatteyim")
-	print updates
 	try:
 		#print("burasi normal yer")
 		name = updates["result"][length-1]["message"]["from"]["first_name"]
@@ -98,14 +97,12 @@ def get_next_message_by_title(text, chat_id):
 
 def answerCallbackQuery(chat_id):
 	message = "True"
-	print("Buraya giriyor mu ?")
 	sendURL = URL + "answerCallbackQuery?text={}&chat_id={}".format(message, chat_id);	
 	sendURL = sendURL.replace("#","No:")
 	send_request(sendURL);
 
 def send_message(message, chat_id,reply_markup=""):
 
-	print(chat_id)
 	sendURL = URL + "sendMessage?text={}&chat_id={}".format(message, chat_id);
 	if reply_markup != "":
 		sendURL = sendURL + "&reply_markup={}".format(reply_markup)
@@ -224,7 +221,13 @@ def main():
 					send_message(r.text,chat)
 					send_photo(res,chat,begin=3,end=8);
 					time.sleep(2)
-
+			elif r.text == "\"100\"":
+				print("HHHHEEERRREEE")
+				book = text;
+				send_message(r.text,chat)
+				url =  HOST + "getAverageRating/{}/".format(book)
+				_json = get_json(url)
+				print(_json['rating'])
 			elif r.text == '\"Goodbye bookworm!\"':
 				send_message(r.text, chat);
 				counter = 0
