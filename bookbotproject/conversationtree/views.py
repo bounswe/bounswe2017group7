@@ -242,7 +242,7 @@ def averagecalc(T):
     return averages
 
 def predict(_userid, averages, T):
-    userId = user
+    userId = _userid
     v1=T.hasValues(userId)
     similarusers={}
 
@@ -273,20 +273,20 @@ def predict(_userid, averages, T):
     prediction = averages[userId]
     simeff=0
     simsum=0
-    fivestars={}
-    fourstars={}
+    fivestars=[]
+    fourstars=[]
     for simus in similarusers.keys():
-        rates=Rate.objects.get(user_id=simus)
-        for i in range(len(Rate.objects.get(user_id=simus))):
-            if(Rate.objects.filter(user_id=simus)[i].value==5):
-                fivestars.append(Rate.objects.filter(user_id=simus)[i].book_title)
-            elif(Rate.objects.filter(user_id=simus)[i].value==4):
-                fourstars.append(Rate.objects.filter(user_id=simus)[i].book_title)
+        rates=Rate.objects.filter(user_id=simus)
+        for i in range(len(rates)):
+            if(rates[i].value==5):
+                fivestars.append(rates[i].book_title)
+            elif(rates[i].value==4):
+                fourstars.append(rates[i].book_title)
     
     if len(fivestars)>2:
         return fivestars
     else: 
-        return fivestars.append(fourstars)
+        return fivestars + fourstars
 #recommendation part ends
 
 def get_response(request, _message, _chatid):
