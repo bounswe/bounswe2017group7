@@ -15,6 +15,8 @@ from serializers import NodeSerializer
 from conversationtree.models import TelegramUser
 from serializers import TelegramUserSerializer
 from witapi import *
+import numpy
+import math
 #import recommend
 
 # Create your views here.
