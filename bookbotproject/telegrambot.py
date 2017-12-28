@@ -253,6 +253,7 @@ def main():
 			elif r.text == '\"Your comment is saved!\"':
 				comment = text
 				url =  HOST + "addComment/{}/{}/{}/".format(book, user_id, comment)
+				print(url)
 				send_message(r.text, chat);
 				r = requests.post(url)
 			elif r.text == '\"Your rating is saved!\"':
