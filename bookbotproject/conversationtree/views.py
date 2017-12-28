@@ -166,6 +166,7 @@ def get_comments(request,book):
     except MultipleObjectsReturned:
         comments = Comment.objects.filter(book=b).filter(isFlagged=False)
 
+    comments = Comment.objects.filter(book=b).filter(isFlagged=False)
 
     if request.method == 'GET':
         print(comments)
