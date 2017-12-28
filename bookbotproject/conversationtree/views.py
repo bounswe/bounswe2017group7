@@ -242,7 +242,7 @@ def averagecalc(T):
     return averages
 
 def predict(_userid, averages, T):
-    userId = user
+    userId = _userid
     v1=T.hasValues(userId)
     similarusers={}
 
@@ -273,20 +273,34 @@ def predict(_userid, averages, T):
     prediction = averages[userId]
     simeff=0
     simsum=0
-    fivestars={}
-    fourstars={}
+    fivestars=[]
+    fourstars=[]
+
+    myuserbooks = []
+    myuser =Rate.objects.filter(user_id=_userid)
+    for i in range (len(myuser)):
+        myuserbooks.append(myuser[i].book_title)
+
     for simus in similarusers.keys():
-        rates=Rate.objects.get(user_id=simus)
-        for i in range(len(Rate.objects.get(user_id=simus))):
-            if(Rate.objects.filter(user_id=simus)[i].value==5):
-                fivestars.append(Rate.objects.filter(user_id=simus)[i].book_title)
-            elif(Rate.objects.filter(user_id=simus)[i].value==4):
-                fourstars.append(Rate.objects.filter(user_id=simus)[i].book_title)
+
+        rates=Rate.objects.filter(user_id=simus)
+
+
+
+        #print rates[0].user_id
+        for i in range(len(rates)):
+            #print rates[i].book_title
+            if(rates[i].value==5 and rates[i].book_title not in myuserbooks):
+                fivestars.append(rates[i].book_title)
+            elif(rates[i].value==4 and rates[i].book_title not in myuserbooks):
+                fourstars.append(rates[i].book_title)
     
+    print fivestars
+    print fourstars
     if len(fivestars)>2:
         return fivestars
     else: 
-        return fivestars.append(fourstars)
+        return fivestars + fourstars
 #recommendation part ends
 
 def get_response(request, _message, _chatid):
@@ -371,9 +385,20 @@ def get_response(request, _message, _chatid):
             return JsonResponse("Showing more books from this title", safe=False)
 
         elif curr_node.intent == 'recommendation':
+            print('recommendation giris')
+            T = Table()
+            importer(T)
+            averages=averagecalc(T)
+            booklist = predict(curr_user.userid, averages, T)
+            print(type(booklist))
+            booklist = [book.encode('utf-8') for book in booklist]
+            s = ""
+            for book in booklist:
+                s += book + ", "
             curr_user.currentnode=Node.objects.all()[0]
+            
             curr_user.save()
-            return JsonResponse(get_recommendation, safe=False)
+            return JsonResponse(s[:-2], safe=False)
         else:   
             for i in range(len(curr_node.get_children())):
                 if intent_ret == curr_node.get_children()[i].intent:
