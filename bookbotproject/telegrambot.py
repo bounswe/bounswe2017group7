@@ -44,11 +44,31 @@ def check_user(name, user_id, chat_id):
 
 def get_last_chat(updates):
 	length = len(updates["result"]);
-	name = updates["result"][length-1]["message"]["from"]["first_name"]
-	user_id = updates["result"][length-1]["message"]["from"]["id"];
-	text = updates["result"][length-1]["message"]["text"];
-	chat_id = updates["result"][length-1]["message"]["chat"]["id"];
-	update_id = updates["result"][length-1]["update_id"]; 
+	#print("Get last chatteyim")
+	print updates
+	try:
+		#print("burasi normal yer")
+		name = updates["result"][length-1]["message"]["from"]["first_name"]
+		#print("name aldi")
+		user_id = updates["result"][length-1]["message"]["from"]["id"];
+		#print("userid aldi")
+		text = updates["result"][length-1]["message"]["text"];
+		#print("text aldi")
+		chat_id = updates["result"][length-1]["message"]["chat"]["id"];
+		#print("chatid aldi")
+		update_id = updates["result"][length-1]["update_id"]; 
+		#print("update id aldi")
+	except KeyError as e:
+		#print("burasi exceptionli")
+		name = updates["result"][length-1]["callback_query"]["from"]["first_name"]
+		user_id = updates["result"][length-1]["callback_query"]["from"]["id"];
+		text = updates["result"][length-1]["callback_query"]["data"];
+		chat_id = updates["result"][length-1]["callback_query"]["message"]["chat"]["id"];
+		update_id = updates["result"][length-1]["update_id"]; 
+		answerCallbackQuery(chat_id)
+	#print("name "+name )
+	#print(user_id)
+	#print chat_id
 	check_user(name, user_id, chat_id)
 
 	return [text, chat_id, update_id, user_id];
@@ -76,20 +96,23 @@ def get_next_message_by_title(text, chat_id):
 	
 	return book
 
-def send_message(message, chat_id):
-	#response = get_next_message_by_response(message, chat_id);
-	if(isinstance(message,list)):
-		for index in message:
-			sendURL = URL + "sendMessage?text={}&chat_id={}".format(index, chat_id);
-			sendURL = sendURL.replace("#","No:")
-			send_request(sendURL);
-			time.sleep(0.3);
-	else:
-		print(chat_id)
-		sendURL = URL + "sendMessage?text={}&chat_id={}".format(message, chat_id);
-		sendURL = sendURL.replace("#","No:")
-		
-		send_request(sendURL);
+def answerCallbackQuery(chat_id):
+	message = "True"
+	print("Buraya giriyor mu ?")
+	sendURL = URL + "answerCallbackQuery?text={}&chat_id={}".format(message, chat_id);	
+	sendURL = sendURL.replace("#","No:")
+	send_request(sendURL);
+
+def send_message(message, chat_id,reply_markup=""):
+
+	print(chat_id)
+	sendURL = URL + "sendMessage?text={}&chat_id={}".format(message, chat_id);
+	if reply_markup != "":
+		sendURL = sendURL + "&reply_markup={}".format(reply_markup)
+
+	sendURL = sendURL.replace("#","No:")	
+	send_request(sendURL);
+
 
 def send_photo(works, chat_id, begin=0, end=3):
 	"""Sends five best books pictures alongside with information """
@@ -147,27 +170,43 @@ def main():
 
 			if end_switch and r.text == '\"Goodbye bookworm!\"':
 				end_switch = True
+			elif r.text == "\"Get or give information? I can also recommend some books!\"":
+				keyboard = '{"inline_keyboard" : [[{"text":"Get information","callback_data":"I want to get information"}],[{"text":"Give information","callback_data":"give info"}],[{"text":"Recomend me some books","callback_data":"recommend"}]]}'
+				send_message(r.text,chat,keyboard)
+
+			elif r.text == "\"Do you want to search a book  by author, genre or subject?\"":
+				keyboard = '{"inline_keyboard" : [[{"text":"Search by subject","callback_data":"search by subject"}],[{"text":"Search by author","callback_data":"search by author"}],[{"text":"Search by genre","callback_data":"search by genre"}]]}'
+				send_message(r.text,chat,keyboard)
+			
+			
+			elif r.text == "\"Rate a book or comment on a book?\"":
+				keyboard = '{"inline_keyboard" : [[{"text":"Rate a book","callback_data":"rate a book"}],[{"text":"Comment on a book","callback_data":"comment on a book"}]]}'
+				send_message(r.text,chat,keyboard)
+
 			elif r.text == "\"Do you want more books from this title?\"":
 				title=text
 				res = get_next_message_by_title(title, chat)
 				send_photo(res, chat);
 				time.sleep(2)
-				send_message(r.text,chat)
+				keyboard = '{"inline_keyboard" : [[{"text":"Thank you and Goodbye!","callback_data":"goodbye"}],[{"text":"Yesss! Go on!","callback_data":"Yes"}]]}'
+				send_message(r.text,chat,keyboard)
 				
 			elif r.text == "\"Do you want more books from this author?\"":
 				author = text
 				res = get_next_message_by_author(author, chat)
 				send_photo(res, chat);
 				time.sleep(2)
-				send_message(r.text,chat)
+				keyboard = '{"inline_keyboard" : [[{"text":"Thank you and Goodbye!","callback_data":"goodbye"}],[{"text":"Yesss! Go on!","callback_data":"Yes"}]]}'
+				send_message(r.text,chat,keyboard)
 				
 			elif r.text == "\"Do you want more books from this genre?\"":	
 				genre = text
 				res = get_next_message_by_genre(genre, chat)
 				send_photo(res, chat);
-				send_message(r.text,chat)
 				time.sleep(2)
-
+				keyboard = '{"inline_keyboard" : [[{"text":"Thank you and Goodbye!","callback_data":"goodbye"}],[{"text":"Yesss! Go on!","callback_data":"Yes"}]]}'
+				send_message(r.text,chat,keyboard)
+				
 			elif r.text == "\"Showing more books from this author\"":
 				if text=="Yes":
 					send_message(r.text,chat)
@@ -195,7 +234,8 @@ def main():
 				send_message(r.text, chat);
 			elif r.text == '\"What is your rating from 1 to 5?\"':
 				book = text
-				send_message(r.text, chat);	
+				keyboard = '{"inline_keyboard": [[{"text":"1", "callback_data":"1"},{"text":"2", "callback_data":"2"},{"text":"3", "callback_data":"3"},{"text":"4", "callback_data":"4"},{"text":"5", "callback_data":"5"}]]}'
+				send_message(r.text, chat,keyboard);		
 			elif r.text == '\"Your comment is saved!\"':
 				comment = text
 				url =  HOST + "addComment/{}/{}/{}/".format(book, user_id, comment)
