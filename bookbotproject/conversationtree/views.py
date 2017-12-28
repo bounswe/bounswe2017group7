@@ -116,16 +116,14 @@ def add_new_user(request, _name, _userid, _chatid):
 
 @csrf_exempt
 def add_comment (  request, _title, _userid, _comment ):
-    _title_conv = _title.replace('_', ' ')
-    _comment_conv =_comment.replace('_', ' ')
-    if request.method == 'POST':
         try:
-            commentbook = Book.objects.get(title=_title_conv)
+            commentbook = Book.objects.get(title=_title)
+            print(_title)
         except:
-            Book.objects.create(title=_title_conv)
-            commentbook = Book.objects.get(title=_title_conv)
+            Book.objects.create(title=_title)
+            commentbook = Book.objects.get(title=_title)
         _user = TelegramUser.objects.get(userid=_userid)
-        newComment = Comment.objects.create( user=_user,comment=_comment_conv, book = _title_conv)
+        newComment = Comment.objects.create( user=_user,comment=_comment, book=commentbook)
         return HttpResponse(status=200)
 
 @csrf_exempt
@@ -168,8 +166,10 @@ def get_comments(request,book):
     except MultipleObjectsReturned:
         comments = Comment.objects.filter(book=b).filter(isFlagged=False)
 
+    comments = Comment.objects.filter(book=b).filter(isFlagged=False)
 
     if request.method == 'GET':
+        print(comments)
         comment_json="{\"comments\""+":["
         for c in comments:
             comment_json += "{\"comment\":\"" + str(c.comment) + "\"},"
