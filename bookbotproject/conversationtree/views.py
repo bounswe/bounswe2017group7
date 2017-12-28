@@ -155,12 +155,14 @@ def get_comments(request,book):
     try:
         b = Book.objects.get(title=book)
     except Book.DoesNotExist:
-        return HttpResponse(status=404)
+        comment_json="{\"comments\""+":\"None\"}"
+        return HttpResponse(comment_json, content_type='application/json')
 
     try:
         comments = Comment.objects.get(book=b)
     except Comment.DoesNotExist:
-        return HttpResponse(status=404)
+        comment_json="{\"comments\""+":\"None\"}"
+        return HttpResponse(comment_json, content_type='application/json')
     except MultipleObjectsReturned:
         comments = Comment.objects.filter(book=b).filter(isFlagged=False)
 

@@ -233,9 +233,12 @@ def main():
 				book = text;
 				url =  HOST + "getComments/{}/".format(book)
 				_json = get_json(url)
-				length = 3 if  len(_json["comments"]) > 3 else len(_json["comments"])
-				for i in range(0,length):
-					send_message( "\"" + _json["comments"][i]["comment"] + "\"", chat)
+				if _json["comments"] == "None":
+					send_message( "Sorry, I couldn't find any comment about this book", chat)
+				else:
+					length = 3 if  len(_json["comments"]) > 3 else len(_json["comments"])
+					for i in range(0,length):
+						send_message( "\"" + _json["comments"][i]["comment"] + "\"", chat)
 			elif r.text == '\"Goodbye bookworm!\"':
 				send_message(r.text, chat);
 				counter = 0
