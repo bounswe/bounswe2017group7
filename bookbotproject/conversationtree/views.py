@@ -155,12 +155,14 @@ def get_comments(request,book):
     try:
         b = Book.objects.get(title=book)
     except Book.DoesNotExist:
-        return HttpResponse(status=404)
+        comment_json="{\"comments\""+":\"None\"}"
+        return HttpResponse(comment_json, content_type='application/json')
 
     try:
         comments = Comment.objects.get(book=b)
     except Comment.DoesNotExist:
-        return HttpResponse(status=404)
+        comment_json="{\"comments\""+":\"None\"}"
+        return HttpResponse(comment_json, content_type='application/json')
     except MultipleObjectsReturned:
         comments = Comment.objects.filter(book=b).filter(isFlagged=False)
 
@@ -168,7 +170,7 @@ def get_comments(request,book):
     if request.method == 'GET':
         comment_json="{\"comments\""+":["
         for c in comments:
-            comment_json += "{\"comment\":" + str(c.comment) + "},"
+            comment_json += "{\"comment\":\"" + str(c.comment) + "\"},"
 
         comment_json = comment_json[:-1] + "]}"
         return HttpResponse(comment_json, content_type='application/json')
@@ -182,11 +184,12 @@ def get_average_rating(request,book):
     try:
         b = Book.objects.get(title=book)
     except Book.DoesNotExist:
-        return HttpResponse(status=404)
+        rate_json = "{\"rating\""+":\"None\"}"
+        return HttpResponse(rate_json, content_type='application/json')
 
 
     if request.method == 'GET':
-        rate_json = "{\"average rating\""+":\""+ str(b.avg_rating)+"\"}"
+        rate_json = "{\"rating\""+":\""+ str(b.avg_rating)+"\"}"
         return HttpResponse(rate_json, content_type='application/json')
 
 
@@ -300,7 +303,7 @@ def get_response(request, _message, _chatid):
         curr_user = TelegramUser.objects.get(chatid=_chatid)
         curr_node = curr_user.currentnode
 
-        db_intents = ['comment_on_book','book_name_comment','rate_book','book_name_rating','get_by_author','get_by_genre','get_by_title']
+        db_intents = ['comment_on_book','book_name_comment','rate_book','book_name_rating','get_by_author','get_by_genre','get_by_title','get_comments','get_average_rating']
         if intent_ret is None and str(curr_node.intent) not in db_intents:
             return JsonResponse('I couldn\'t understand can you express it more simple?', safe=False)
         elif intent_ret == 'end_dialog':
@@ -309,6 +312,22 @@ def get_response(request, _message, _chatid):
             return JsonResponse('Goodbye bookworm!', safe=False)
         elif curr_node.intent == 'comment_on_book':
             curr_user.currentnode=curr_node.get_children()[0]
+            curr_user.save()
+            return JsonResponse(curr_user.currentnode.message, safe=False)
+        elif curr_node.intent == 'get_comments':
+            curr_user.currentnode=curr_node.get_children()[0]
+            curr_user.save()
+            return JsonResponse(curr_user.currentnode.message, safe=False)
+        elif curr_node.intent == 'get_average_rating':
+            curr_user.currentnode=curr_node.get_children()[0]
+            curr_user.save()
+            return JsonResponse(curr_user.currentnode.message, safe=False)
+        elif curr_node.intent == 'avg':
+            curr_user.currentnode=Node.objects.all()[0]
+            curr_user.save()
+            return JsonResponse(curr_user.currentnode.message, safe=False)
+        elif curr_node.intent == 'comment':
+            curr_user.currentnode=Node.objects.all()[0]
             curr_user.save()
             return JsonResponse(curr_user.currentnode.message, safe=False)
         elif curr_node.intent == 'book_name_comment':
