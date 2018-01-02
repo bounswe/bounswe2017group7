@@ -159,7 +159,7 @@ def main():
 		current_node_intent = json_response['intent']
 
 		#print current_node_intent
-		if(text, chat) != last_chat:
+		if(text, chat) != last_chat or current_node_intent=="recommendation":
 			# Get related response for user message
 			r = requests.get(HOST + "getResponse/{}/{}/".format(text, chat))
 
@@ -168,11 +168,11 @@ def main():
 			if end_switch and r.text == '\"Goodbye bookworm!\"':
 				end_switch = True
 			elif r.text == "\"Get or give information? I can also recommend some books!\"":
-				keyboard = '{"inline_keyboard" : [[{"text":"Get information","callback_data":"I want to get information"}],[{"text":"Give information","callback_data":"give info"}],[{"text":"Recomend me some books","callback_data":"recommend"}]]}'
+				keyboard = '{"inline_keyboard" : [[{"text":"Get information","callback_data":"I want to get information"}],[{"text":"Give information","callback_data":"give info"}],[{"text":"Recommend me some books","callback_data":"recommend"}]]}'
 				send_message(r.text,chat,keyboard)
 
-			elif r.text == "\"Do you want to search a book  by author, genre or subject?\"":
-				keyboard = '{"inline_keyboard" : [[{"text":"Search by subject","callback_data":"search by subject"}],[{"text":"Search by author","callback_data":"search by author"}],[{"text":"Search by genre","callback_data":"search by genre"}]]}'
+			elif r.text == "\"Do you want to search books? You can also get comments or ratings by saying get comments or get ratings!\"":
+				keyboard = '{"inline_keyboard" : [[{"text":"Search by title","callback_data":"search by title"}],[{"text":"Search by author","callback_data":"search by author"}],[{"text":"Search by genre","callback_data":"search by genre"}]]}'
 				send_message(r.text,chat,keyboard)
 			
 			
@@ -253,6 +253,7 @@ def main():
 			elif r.text == '\"Your comment is saved!\"':
 				comment = text
 				url =  HOST + "addComment/{}/{}/{}/".format(book, user_id, comment)
+				print(url)
 				send_message(r.text, chat);
 				r = requests.post(url)
 			elif r.text == '\"Your rating is saved!\"':
@@ -262,7 +263,14 @@ def main():
 				send_message(r.text, chat);
 				r = requests.post(url)
 			else:
-				send_message(r.text, chat);
+				if current_node_intent=="recommendation":
+					rec_books = r.text.split(',')
+					for book in rec_books:
+						book = book.strip()
+						rec = get_next_message_by_title(book, chat)
+						send_photo(rec, chat, 0, 1)
+				else:
+					send_message(r.text, chat);
 				counter = counter+1
 			last_chat = (text, chat);			
 			last_update = update_id; 
