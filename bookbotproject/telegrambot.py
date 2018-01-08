@@ -148,7 +148,9 @@ def main():
 	while True:
 
 		text, chat, update_id, user_id = get_last_chat(get_updates(last_update))
-
+		#starting conversation handler. 
+		if(text == "/start"):
+			text = "hey"
 		#Fixer of the bug unicode special char problem
 		#print("before text = "+text)
 		#text = re.sub('[^A-Za-z0-9]+', ' ', text)
