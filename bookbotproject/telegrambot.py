@@ -74,7 +74,7 @@ def get_last_chat(updates):
 
 def get_next_message_by_genre(text, chat_id):
 	print("genre " + text)
-	
+
 	book = goodReadsApi.search_by_genre(text)
 	
 	return book
@@ -91,7 +91,10 @@ def get_next_message_by_author(text, chat_id):
 def get_next_message_by_title(text, chat_id):
 	print("title "+text)
 	
-	book = goodReadsApi.search_by_name(text)
+	if(text == ""):
+		send_message("No Recommendation is found",chat_id)
+	else:
+		book = goodReadsApi.search_by_name(text)
 	
 	return book
 
