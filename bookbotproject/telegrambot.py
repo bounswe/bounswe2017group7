@@ -90,11 +90,9 @@ def get_next_message_by_author(text, chat_id):
 
 def get_next_message_by_title(text, chat_id):
 	print("title "+text)
+
 	
-	if(text == ""):
-		send_message("No Recommendation is found",chat_id)
-	else:
-		book = goodReadsApi.search_by_name(text)
+	book = goodReadsApi.search_by_name(text)
 	
 	return book
 
@@ -269,6 +267,9 @@ def main():
 				if current_node_intent=="recommendation":
 					rec_books = r.text.split(',')
 					for book in rec_books:
+						if (book == "\"\""):
+							send_message("No Recommendation is found",chat)
+							break
 						book = book.strip()
 						rec = get_next_message_by_title(book, chat)
 						send_photo(rec, chat, 0, 1)
