@@ -23,6 +23,8 @@ class Table(dict):
 
 
 
+
+
 T = Table()
 #f = open('data/u1.base', 'r')
 
@@ -135,6 +137,8 @@ def testline(line):
     # throughput= error/count
     # print 'user '+str(u)+' '+ str(throughput)
 
+    
+
 def createpfile(tf,ptf,T):
     for line in tf.readlines():
         ptf.write(testline(line))
@@ -167,4 +171,4 @@ for i in range(1,6):
     createpfile(tf,ptf,T)
     tf.close()
 
-
+    
